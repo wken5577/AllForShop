@@ -17,7 +17,6 @@ spring:
   profiles:
     include: oauth
 
-
 logging-level:
   org.hibernate.SQL: debug
 

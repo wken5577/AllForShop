@@ -20,15 +20,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/css/**", "/images/**", "/js/**","/h2-console/**").permitAll()
+                    .antMatchers("/", "/css/**", "/img/**", "/js/**","/h2-console/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .logout()
                         .logoutSuccessUrl("/")
                 .and()
                     .oauth2Login()
-                        .userInfoEndpoint()
-                            .userService(customOauth2UserService);
+                        .defaultSuccessUrl("/")
+                            .userInfoEndpoint()
+                                .userService(customOauth2UserService);
 
     }
 }
