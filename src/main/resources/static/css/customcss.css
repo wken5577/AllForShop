@@ -1,3 +1,5 @@
+
+
 .login-button{
     padding-right:0;
     padding-left:0;
@@ -5,7 +7,7 @@
     border-radius:.25rem;
     display:block;padding:.5rem 1rem;
     color:#dee2e6;text-decoration:none;
-   
+
 }
 
 .navbar.navbar-expand-lg.navbar-light.bg-light{
@@ -19,46 +21,37 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 0px 30px;
+    justify-content: space-between flex-start;
+    padding: 0px 200px;
 }
 
-.card-custom{
-    margin: 20px 20px;
-    display: inline-block;
-    width:300px;
-    height:400px;
-    border:1px solid #dee2e6;
-    border-radius: 7px;
+.card img{
+    height: 260px;
 }
 
-.card-custom img{
-    width: 100%;
-    height:250px;
-    border-radius: 7px;
+.card{
+    margin-top: 50px;
+    margin-right: 80px;
+    height: 380px;
 }
 
-.card-custom h3{
-    margin-top:15px;
-    padding-left: 10px;
-    font-weight: lighter;
-    font-size: 20px;
+.card-body{
+    position: relative;
 }
 
-
-.card-custom strong{
-    display: block;
-    margin-top: 65px;
-    margin-right: 10px;
-    font-weight: lighter;
-    text-align: right;
+.card-body span{
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
 }
+
 
 .modal.fade{
     position: fixed;
     top:50%;
     transform: translateY(-20%);
 }
+
 
 .modal-body img{
     width : 50px;
@@ -76,6 +69,28 @@ a:link {
 
 }
 
+.item-form{
+    padding: 50px 350px;
+}
 
 
+.item-form h2 {
+    margin-bottom: 20px;
+}
+
+.form-select{
+    margin-bottom: 20px;
+}
+
+.btn.btn-primary, .btn.btn-danger{
+    width:100px;
+}
+
+.submit-button{
+    text-align: right;
+}
+
+.nav-item{
+    margin-right: 30px;
+}
 

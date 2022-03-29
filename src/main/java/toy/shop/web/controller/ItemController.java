@@ -1,24 +1,25 @@
 package toy.shop.web.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import toy.shop.entity.ItemImages;
 import toy.shop.oauth.dto.SessionUser;
 import toy.shop.service.ItemService;
+import toy.shop.web.argumentresolver.Login;
 import toy.shop.web.dtorequest.ItemCreateDto;
 import toy.shop.web.dtoresponse.*;
-import toy.shop.entity.Item;
 import toy.shop.service.CategoryService;
 import toy.shop.web.filestore.FileStore;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 @Controller
@@ -35,26 +36,37 @@ public class ItemController {
         this.fileStore = fileStore;
     }
 
-    @GetMapping("/upload")
-    public String newFile(Model model) {
+    @GetMapping("/items/new")
+    public String getItemForm(Model model, @Login SessionUser sessionUser) {
+
         List<CategoryResponseDto> result = categoryService.findAllDto();
+        ItemCreateDto itemCreateDto = new ItemCreateDto();
+
+
+        model.addAttribute("item", itemCreateDto);
         model.addAttribute("categories", result);
-        return "upload-form";
+        model.addAttribute("user",sessionUser);
+
+        return "item-create-form";
     }
 
-    @PostMapping("/upload")
-    public String saveItem(ItemCreateDto itemCreateDto, HttpSession session) throws IOException {
-        SessionUser sessionUser = (SessionUser) session.getAttribute("user");
-
+    @PostMapping("/items/new")
+    public String saveItem(ItemCreateDto itemCreateDto, @Login SessionUser sessionUser) throws IOException {
         List<MultipartFile> file = itemCreateDto.getFile();
         List<ItemImages> itemImages = fileStore.storeFiles(file);
 
 
         itemService.addItem(sessionUser.getId(), itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
-                itemCreateDto.getPrice(), itemCreateDto.getQuantity(),itemImages);
+                itemCreateDto.getPrice(), itemCreateDto.getQuantity(),itemImages, itemCreateDto.getItemInfo());
 
         return "redirect:/";
     }
 
+
+    @ResponseBody
+    @GetMapping("/img/{fileName}")
+    public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(fileName));
+    }
 
 }

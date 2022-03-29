@@ -31,17 +31,20 @@ public class Item extends BaseEntity{
 
     private String name;
 
+    private String itemInfo;
+
     private int price;
 
     private int quantity;
 
-    public Item(Category category, String name, int price, int quantity, User user, List<ItemImages> itemImages) {
+    public Item(Category category, String name, int price, int quantity, User user, List<ItemImages> itemImages, String itemInfo) {
         this.user = user;
         this.category = category;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.itemImages = itemImages;
+        this.itemInfo = itemInfo;
 
         for (ItemImages itemImage : itemImages) {
             itemImage.setItem(this);

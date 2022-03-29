@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>타이틀</title>
+        <title>document</title>
     </head>
 
     <body>
@@ -38,9 +38,11 @@
             
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                  <li th:each = "category : ${categories}"  class="nav-item">
+                    <a th:text = "${category.name}" class="nav-link" href="#" th:href = "@{/category(categoryId = ${category.id})}" >Link</a>
                   </li>
+
+
                 </ul>
 
                 <form class="d-flex">
@@ -53,17 +55,13 @@
           </nav>
         
         <main class="card-contents">
-            <div class="card-custom">
-               <img src = "img/main_wide2_3.jpg">
-               <h3>
-                 상품명
-               </h3>
-               <strong>
-                ₩ 37,000
-               </strong>
-              </div>
-          
-            
+            <div class="card" style="width: 18rem;" th:each = "item : ${items}">
+                <img th:src="@{|/img/${item.storeFileName}|}" src="./img/main_wide2_3.jpg" class="card-img-top" alt="item-thumbnail">
+                <div class="card-body">
+                    <p th:text = "${item.name}"class="card-text">Some quick example text to build </p>
+                    <span th:text = "${item.price}">6,300원</span>
+                </div>
+            </div>
         </main>
 
         <th:block th:replace="~{fragment/footer_js :: script}"></th:block>

@@ -60,7 +60,7 @@ class OrderControllerTest {
 
         Category category = new Category("아우터");
         em.persist(category);
-        Item item1 = new Item(category,"가디건",70000,20, user, null);
+        Item item1 = new Item(category,"가디건",70000,20, user, null, null);
         em.persist(item1);
 
         OrderItem orderItem1 =OrderItem.orderItem(item1,item1.getPrice(),1);
@@ -94,7 +94,7 @@ class OrderControllerTest {
 
         Category category = new Category("아우터");
         em.persist(category);
-        Item item1 = new Item(category,"가디건",70000,20, user, null);
+        Item item1 = new Item(category,"가디건",70000,20, user, null,null);
         em.persist(item1);
 
 

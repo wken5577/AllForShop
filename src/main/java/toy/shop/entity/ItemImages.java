@@ -1,12 +1,15 @@
 package toy.shop.entity;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @SequenceGenerator(name = "item_images_sequence",sequenceName = "item_images_sequence")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ItemImages {
 
     @Id
