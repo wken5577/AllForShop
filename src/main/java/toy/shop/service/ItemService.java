@@ -2,6 +2,7 @@ package toy.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import toy.shop.entity.Category;
 import toy.shop.entity.Item;
 import toy.shop.entity.ItemImages;
@@ -9,6 +10,7 @@ import toy.shop.entity.User;
 import toy.shop.repository.CategoryRepository;
 import toy.shop.repository.ItemRepository;
 import toy.shop.repository.UserRepository;
+import toy.shop.web.dtoresponse.DetailItemResponseDto;
 import toy.shop.web.dtoresponse.IndexItemResponseDto;
 
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ItemService {
 
     private final ItemRepository itemRepository;
@@ -55,20 +58,31 @@ public class ItemService {
         return itemId;
     }
 
+    @Transactional(readOnly = true)
     public List<IndexItemResponseDto> findItemsByCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId).get();
         List<Item> findItems = itemRepository.findByCategory(category);
-        List<IndexItemResponseDto> result = findItems.stream().map(entity -> new IndexItemResponseDto(entity)).collect(Collectors.toList());
+
+        List<IndexItemResponseDto> result = findItems.stream()
+                .map(IndexItemResponseDto::new).collect(Collectors.toList());
 
         return result;
     }
 
+    @Transactional(readOnly = true)
     public List<IndexItemResponseDto> findAll() {
         List<Item> findItems = itemRepository.findAll();
         List<IndexItemResponseDto> result = findItems.stream().
-                map(entity -> new IndexItemResponseDto(entity)).collect(Collectors.toList());
-
+                map(IndexItemResponseDto::new).collect(Collectors.toList());
 
         return result;
     }
+
+    public DetailItemResponseDto findById(Long itemId) {
+        DetailItemResponseDto item = itemRepository.findById(itemId)
+                .map(DetailItemResponseDto::new).get();
+
+        return item;
+    }
+
 }

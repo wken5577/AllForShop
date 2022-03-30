@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     .antMatchers("/", "/css/**", "/img/**", "/js/**","/h2-console/**").permitAll()
-                    .anyRequest().authenticated()
+
                 .and()
                     .logout()
                         .logoutSuccessUrl("/")

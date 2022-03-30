@@ -42,7 +42,6 @@ public class ItemController {
         List<CategoryResponseDto> result = categoryService.findAllDto();
         ItemCreateDto itemCreateDto = new ItemCreateDto();
 
-
         model.addAttribute("item", itemCreateDto);
         model.addAttribute("categories", result);
         model.addAttribute("user",sessionUser);
@@ -68,5 +67,19 @@ public class ItemController {
     public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(fileName));
     }
+
+    @GetMapping("/item/detail/{itemId}")
+    public String getItemDetail(@Login SessionUser sessionUser, @PathVariable Long itemId, Model model) {
+        model.addAttribute("user", sessionUser);
+
+        List<CategoryResponseDto> categories = categoryService.findAllDto();
+        model.addAttribute("categories", categories);
+
+        DetailItemResponseDto item = itemService.findById(itemId);
+        model.addAttribute("item", item);
+        return "item-detail";
+    }
+
+
 
 }

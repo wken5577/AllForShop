@@ -33,35 +33,20 @@
             </button>
           </div>
 
-          <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-            
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li th:each = "category : ${categories}"  class="nav-item">
-                    <a th:text = "${category.name}" class="nav-link" href="#" th:href = "@{/category(categoryId = ${category.id})}" >Link</a>
-                  </li>
-
-
-                </ul>
-
-                <form class="d-flex">
-                  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-              </div>
-
-            </div>
-          </nav>
+        <th:block th:replace="~{fragment/navbar :: sub-navbar}"></th:block>
         
         <main class="card-contents">
+
             <div class="card" style="width: 18rem;" th:each = "item : ${items}">
-                <img th:src="@{|/img/${item.storeFileName}|}" src="./img/main_wide2_3.jpg" class="card-img-top" alt="item-thumbnail">
-                <div class="card-body">
-                    <p th:text = "${item.name}"class="card-text">Some quick example text to build </p>
-                    <span th:text = "${item.price}">6,300원</span>
-                </div>
+                <a th:href="@{/item/detail/{itemId}(itemId = ${item.itemId})}" href="#">
+                    <img th:src="@{|/img/${item.storeFileName}|}" src="./img/main_wide2_3.jpg" class="card-img-top" alt="item-thumbnail">
+                    <div class="card-body">
+                        <p th:text = "${item.name}"class="card-text">Some quick example text to build </p>
+                        <span th:text = "|${{item.price}}원|">6,300원</span>
+                    </div>
+                </a>
             </div>
+
         </main>
 
         <th:block th:replace="~{fragment/footer_js :: script}"></th:block>

@@ -2,37 +2,39 @@ package toy.shop.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import toy.shop.entity.Item;
 import toy.shop.entity.Order;
+
 import toy.shop.entity.OrderItem;
 import toy.shop.entity.User;
 import toy.shop.repository.ItemRepository;
 import toy.shop.repository.OrderRepository;
 import toy.shop.repository.UserRepository;
-import toy.shop.web.dtorequest.OrderRequestDto;
+
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderService {
 
     private final ItemRepository itemRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
 
-    public Long order(OrderRequestDto orderRequestDto, Long userId) {
-        User findUser = userRepository.findById(userId).
-                orElseThrow(() -> new IllegalStateException("회원 정보가 없습니다. 로그인이 필요합니다."));
 
-        Long itemId = orderRequestDto.getItemId();
-        Item findItem = itemRepository.findById(itemId).
-                orElseThrow(() -> new IllegalStateException("상품 정보가 없습니다"));
+    public Long orderOne(String deliveryAddress,Long itemId, int quantity, Long userId) {
+        User findUser = userRepository.getById(userId);
+        Item findItem = itemRepository.getById(itemId);
 
-        OrderItem orderItem = OrderItem.orderItem(findItem, orderRequestDto.getPrice(), orderRequestDto.getQuantity());
+        OrderItem orderItem = OrderItem.orderItem(findItem, findItem.getPrice(), quantity);
 
-        Order order = Order.order(findUser, orderRequestDto.getDeliveryAddress(), List.of(orderItem));
+        Order order = Order.order(findUser, deliveryAddress, List.of(orderItem));
         orderRepository.save(order);
+
         return order.getId();
     }
 

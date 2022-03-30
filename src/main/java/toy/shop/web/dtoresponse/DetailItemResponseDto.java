@@ -9,21 +9,25 @@ import toy.shop.entity.Item;
 @Getter
 @Setter
 @NoArgsConstructor
-public class IndexItemResponseDto {
+public class DetailItemResponseDto {
 
     private Long itemId;
     private String name;
 
     @NumberFormat(style = NumberFormat.Style.NUMBER)
     private Number price;
+
+    private String info;
     private String storeFileName;
 
-
-    public IndexItemResponseDto(Item item) {
+    public DetailItemResponseDto(Item item) {
+        this.itemId = item.getId();
         this.name = item.getName();
         this.price = item.getPrice();
+        this.info = item.getItemInfo();
         this.storeFileName = item.getItemImages().get(0).getStoreFileName();
-        this.itemId = item.getId();
     }
+
+
 
 }

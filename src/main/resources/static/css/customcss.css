@@ -1,4 +1,4 @@
-
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
 
 .login-button{
     padding-right:0;
@@ -21,28 +21,36 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-between flex-start;
-    padding: 0px 200px;
+    justify-content: space-around flex-start;
+    padding: 0 120px;
+
 }
 
 .card img{
     height: 260px;
 }
 
-.card{
-    margin-top: 50px;
-    margin-right: 80px;
-    height: 380px;
+.card-text{
+    font-family: 'Gowun Batang', serif;
+    font-size: 15px;
+    font-weight: 700;
 }
 
-.card-body{
+.card{
+    margin : 50px 60px;
+    height: 380px;
     position: relative;
+}
+
+.card a{
+    height: inherit;
 }
 
 .card-body span{
     position: absolute;
     bottom: 20px;
     right: 10px;
+    font-family: 'Gowun Batang', serif;
 }
 
 
@@ -59,7 +67,7 @@
 
 }
 
-a:link {
+a {
     color: black;
     text-decoration: none;
 }
@@ -93,4 +101,16 @@ a:link {
 .nav-item{
     margin-right: 30px;
 }
+
+
+.btn.btn-outline-dark.flex-shrink-0{
+    margin-right: 10px;
+}
+
+.lead{
+    height: 150px;
+}
+
+
+
 

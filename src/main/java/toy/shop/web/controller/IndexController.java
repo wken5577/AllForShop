@@ -35,13 +35,13 @@ public class IndexController {
     }
 
     @GetMapping("/category")
-    public String getItemsByCategory(Long categoryId, Model model, @Login SessionUser sessionUser) {
+    public String getItemsByCategory(Long cgId, Model model, @Login SessionUser sessionUser) {
         model.addAttribute("user", sessionUser);
 
         List<CategoryResponseDto> categories = categoryService.findAllDto();
         model.addAttribute("categories", categories);
 
-        List<IndexItemResponseDto> result = itemService.findItemsByCategory(categoryId);
+        List<IndexItemResponseDto> result = itemService.findItemsByCategory(cgId);
         model.addAttribute("items",result);
         return "index";
     }
