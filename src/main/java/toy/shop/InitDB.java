@@ -1,15 +1,20 @@
 package toy.shop;
 
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import toy.shop.entity.Category;
 import toy.shop.repository.CategoryRepository;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 
+@RequiredArgsConstructor
 public class InitDB {
 
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+
 
     void init() {
         Category category1 = new Category("TOP");
@@ -19,7 +24,7 @@ public class InitDB {
         Category category5 = new Category("PANTS");
         Category category6 = new Category("SHOES");
 
-        categoryRepository.saveAll(List.of(category1,category2,category3,category4,category5,category6));
+        categoryRepository.saveAll(List.of(category1, category2, category3, category4, category5, category6));
     }
 
 

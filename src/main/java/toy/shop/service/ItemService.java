@@ -10,6 +10,7 @@ import toy.shop.entity.User;
 import toy.shop.repository.CategoryRepository;
 import toy.shop.repository.ItemRepository;
 import toy.shop.repository.UserRepository;
+import toy.shop.web.dtoresponse.AdminItemResponseDto;
 import toy.shop.web.dtoresponse.DetailItemResponseDto;
 import toy.shop.web.dtoresponse.IndexItemResponseDto;
 
@@ -60,8 +61,7 @@ public class ItemService {
 
     @Transactional(readOnly = true)
     public List<IndexItemResponseDto> findItemsByCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).get();
-        List<Item> findItems = itemRepository.findByCategory(category);
+        List<Item> findItems = itemRepository.findByCategoryId(categoryId);
 
         List<IndexItemResponseDto> result = findItems.stream()
                 .map(IndexItemResponseDto::new).collect(Collectors.toList());
@@ -85,4 +85,10 @@ public class ItemService {
         return item;
     }
 
+    public List<AdminItemResponseDto> getItemsByUser(Long userId) {
+        List<Item> result = itemRepository.findByUserId(userId);
+        List<AdminItemResponseDto> items = result.stream().map(AdminItemResponseDto::new).collect(Collectors.toList());
+
+        return items;
+    }
 }

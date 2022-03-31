@@ -12,9 +12,11 @@ import toy.shop.entity.User;
 import toy.shop.repository.ItemRepository;
 import toy.shop.repository.OrderRepository;
 import toy.shop.repository.UserRepository;
+import toy.shop.web.dtoresponse.OrderResponseDto;
 
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,6 +45,14 @@ public class OrderService {
         Order findOrder = orderRepository.findById(orderId).
                 orElseThrow(() -> new IllegalStateException("주문 정보가 없습니다"));
         findOrder.orderCancel();
+
         return findOrder.getId();
     }
+
+    public List<OrderResponseDto> getOrders(Long userId) {
+        return orderRepository.findByUserId(userId);
+
+    }
+
+
 }

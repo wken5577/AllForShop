@@ -25,11 +25,4 @@ public class OrderController {
         return "redirect:/";
     }
 
-    @PatchMapping("/order/{orderId}")
-    public Long orderCancel(@PathVariable Long orderId){
-        Long cancelId = orderService.cancel(orderId);
-        return cancelId;
-    }
-
-
 }

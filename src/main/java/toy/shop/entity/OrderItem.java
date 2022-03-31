@@ -27,10 +27,13 @@ public class OrderItem {
 
     private int quantity;
 
-    private OrderItem(Item item, int price, int quantity) {
+    private int totalPrice;
+
+    private OrderItem(Item item, int price, int quantity, int totalPrice) {
         this.item = item;
         this.price = price;
         this.quantity = quantity;
+        this.totalPrice = totalPrice;
     }
 
     protected void setOrder(Order order){
@@ -43,7 +46,7 @@ public class OrderItem {
             throw new IllegalStateException("재고수량 부족");
         }
         item.minusQuantity(quantity);
-        return new OrderItem(item, price, quantity);
+        return new OrderItem(item, price, quantity, price * quantity);
     }
 
 

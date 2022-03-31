@@ -9,6 +9,7 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import toy.shop.entity.*;
 import toy.shop.repository.OrderRepository;
+import toy.shop.web.dtoresponse.OrderResponseDto;
 
 import javax.persistence.EntityManager;
 
@@ -102,5 +103,6 @@ class OrderRepositoryTest {
 
 
     }
+
 
 }

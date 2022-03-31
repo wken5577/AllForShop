@@ -38,7 +38,7 @@
         <main class="card-contents">
 
             <div class="card" style="width: 18rem;" th:each = "item : ${items}">
-                <a th:href="@{/item/detail/{itemId}(itemId = ${item.itemId})}" href="#">
+                <a th:href="@{/item/{itemId}(itemId = ${item.itemId})}" href="#">
                     <img th:src="@{|/img/${item.storeFileName}|}" src="./img/main_wide2_3.jpg" class="card-img-top" alt="item-thumbnail">
                     <div class="card-body">
                         <p th:text = "${item.name}"class="card-text">Some quick example text to build </p>

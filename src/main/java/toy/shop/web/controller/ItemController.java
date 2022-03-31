@@ -36,7 +36,7 @@ public class ItemController {
         this.fileStore = fileStore;
     }
 
-    @GetMapping("/items/new")
+    @GetMapping("/item/new")
     public String getItemForm(Model model, @Login SessionUser sessionUser) {
 
         List<CategoryResponseDto> result = categoryService.findAllDto();
@@ -49,7 +49,7 @@ public class ItemController {
         return "item-create-form";
     }
 
-    @PostMapping("/items/new")
+    @PostMapping("/item/new")
     public String saveItem(ItemCreateDto itemCreateDto, @Login SessionUser sessionUser) throws IOException {
         List<MultipartFile> file = itemCreateDto.getFile();
         List<ItemImages> itemImages = fileStore.storeFiles(file);
@@ -62,13 +62,8 @@ public class ItemController {
     }
 
 
-    @ResponseBody
-    @GetMapping("/img/{fileName}")
-    public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(fileName));
-    }
 
-    @GetMapping("/item/detail/{itemId}")
+    @GetMapping("/item/{itemId}")
     public String getItemDetail(@Login SessionUser sessionUser, @PathVariable Long itemId, Model model) {
         model.addAttribute("user", sessionUser);
 
@@ -81,5 +76,10 @@ public class ItemController {
     }
 
 
+    @ResponseBody
+    @GetMapping("/img/{fileName}")
+    public Resource downloadImage(@PathVariable String fileName) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(fileName));
+    }
 
 }
