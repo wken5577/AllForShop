@@ -5,10 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 import toy.shop.entity.ItemImages;
 import toy.shop.service.CategoryService;
 import toy.shop.service.ItemService;
-import toy.shop.web.dtorequest.ItemCreateDto;
-import toy.shop.web.dtoresponse.AdminItemResponseDto;
-import toy.shop.web.dtoresponse.DetailItemResponseDto;
-import toy.shop.web.dtoresponse.IndexItemResponseDto;
+import toy.shop.web.dto.dtorequest.ItemCreateDto;
+import toy.shop.web.dto.dtoresponse.item.DetailItemResponseDto;
+import toy.shop.web.dto.dtoresponse.item.IndexItemResponseDto;
 import toy.shop.web.filestore.FileStore;
 
 import java.io.IOException;
@@ -28,13 +27,13 @@ public class ItemApiController {
     }
 
     @PostMapping("/api/item/new")
-    public Long saveItem(ItemCreateDto itemCreateDto, Long userId) throws IOException {
+    public Long saveItem(ItemCreateDto itemCreateDto, String username) throws IOException {
         List<MultipartFile> file = itemCreateDto.getFile();
         List<ItemImages> itemImages = fileStore.storeFiles(file);
 
 
-        Long savedItemId = itemService.addItem(userId, itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
-                itemCreateDto.getPrice(), itemCreateDto.getQuantity(), itemImages, itemCreateDto.getItemInfo());
+        Long savedItemId = itemService.addItem(username, itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
+                itemCreateDto.getPrice(), itemImages, itemCreateDto.getItemInfo());
 
         return savedItemId;
     }
@@ -47,19 +46,6 @@ public class ItemApiController {
     }
 
 
-    @GetMapping("/api/user/items")
-    public List<AdminItemResponseDto> getItemsByUser(Long userId) {
-        List<AdminItemResponseDto> items =  itemService.getItemsByUser(userId);
-        return items;
-    }
-
-
-
-    @GetMapping("/api/items")
-    public List<IndexItemResponseDto> getItems() {
-        List<IndexItemResponseDto> result = itemService.findAll();
-        return result;
-    }
 
 
 }

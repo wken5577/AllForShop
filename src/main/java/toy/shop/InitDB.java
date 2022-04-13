@@ -11,11 +11,12 @@ import java.util.List;
 
 
 @RequiredArgsConstructor
+//@Component
 public class InitDB {
 
     private final CategoryRepository categoryRepository;
 
-
+    //@PostConstruct
     void init() {
         Category category1 = new Category("TOP");
         Category category2 = new Category("OUTER");

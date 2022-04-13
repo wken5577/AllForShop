@@ -60,9 +60,5 @@ public class Order {
 
     public void orderCancel() {
         this.orderStatus = OrderStatus.CANCEL;
-        for (OrderItem orderItem : orderItems) {
-            int quantity = orderItem.getQuantity();
-            orderItem.getItem().addQuantity(quantity);
-        }
     }
 }

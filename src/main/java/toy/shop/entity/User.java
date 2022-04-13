@@ -15,26 +15,35 @@ public class User extends BaseEntity{
     @Id @GeneratedValue(generator = "user_sequence")
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
-    private String profile;
+    private String password;
 
     private String email;
 
     @Enumerated(EnumType.STRING)
+    private SocialProvider socialProvider;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User(String username, String profile, String email) {
+    public User(String username, String password, String email) {
         this.username = username;
-        this.profile = profile;
+        this.password = password;
         this.email = email;
         this.role = Role.USER;
     }
 
-    public void update(String username, String profile){
-        this.profile = profile;
+    public User(String username, String password, String email, SocialProvider socialProvider) {
         this.username = username;
+        this.password = password;
+        this.email = email;
+        this.socialProvider = socialProvider;
+        this.role = Role.USER;
     }
+
+
 
     public String getRoleKey() {
         return this.role.getKey();

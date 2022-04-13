@@ -8,18 +8,21 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
     properties:
       hibernate:
         format_sql: true
+
+
   h2:
     console:
       enabled: true
+
   profiles:
     include: oauth
-
 
 logging-level:
   org.hibernate.SQL: debug
 
 file:
-  dir: C:\Users\USER\Backend\workspace\shop\src\main\resources\static\img\
+  dir: C:\Users\USER\Backend\file\shop\

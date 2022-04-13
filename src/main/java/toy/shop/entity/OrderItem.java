@@ -41,14 +41,8 @@ public class OrderItem {
     }
 
     public static OrderItem orderItem(Item item, int price, int quantity) {
-        int restQuantity = item.getQuantity() - quantity;
-        if (restQuantity < 0){
-            throw new IllegalStateException("재고수량 부족");
-        }
-        item.minusQuantity(quantity);
         return new OrderItem(item, price, quantity, price * quantity);
     }
-
 
     public int getTotalPrice() {
         return price * quantity;

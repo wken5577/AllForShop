@@ -2,8 +2,8 @@ package toy.shop.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import toy.shop.web.dtoresponse.OrderItemsDto;
-import toy.shop.web.dtoresponse.OrderResponseDto;
+import toy.shop.web.dto.dtoresponse.OrderItemsDto;
+import toy.shop.web.dto.dtoresponse.OrderResponseDto;
 
 import javax.persistence.EntityManager;
 import java.util.List;

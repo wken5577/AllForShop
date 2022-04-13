@@ -35,14 +35,12 @@ public class Item extends BaseEntity{
 
     private int price;
 
-    private int quantity;
 
-    public Item(Category category, String name, int price, int quantity, User user, List<ItemImages> itemImages, String itemInfo) {
+    public Item(Category category, String name, int price, User user, List<ItemImages> itemImages, String itemInfo) {
         this.user = user;
         this.category = category;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
         this.itemImages = itemImages;
         this.itemInfo = itemInfo;
 
@@ -52,18 +50,9 @@ public class Item extends BaseEntity{
 
     }
 
-    protected void addQuantity(int quantity){
-        this.quantity += quantity;
-    }
-
-    protected void minusQuantity(int quantity){
-        this.quantity -= quantity;
-    }
-
     public void update(Category category,String name, int price, int quantity){
         this.category = category;
         this.name = name;
         this.price = price;
-        this.quantity = quantity;
     }
 }

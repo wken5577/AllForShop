@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import toy.shop.oauth.dto.SessionUser;
 import toy.shop.service.OrderService;
-import toy.shop.web.argumentresolver.Login;
-import toy.shop.web.dtorequest.OrderRequestDto;
+import toy.shop.web.dto.dtorequest.OrderRequestDto;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,11 +14,11 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/order")
-    public String order(OrderRequestDto orderRequestDto, @Login SessionUser sessionUser) {
+    public String order(OrderRequestDto orderRequestDto) {
         System.out.println("orderRequestDto = " + orderRequestDto);
 
         Long orderId = orderService.orderOne(orderRequestDto.getDeliveryAddress(),
-                orderRequestDto.getItemId(),orderRequestDto.getQuantity(), sessionUser.getId());
+                orderRequestDto.getItemId(),orderRequestDto.getQuantity(), null);
 
         return "redirect:/";
     }

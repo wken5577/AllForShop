@@ -2,11 +2,9 @@ package toy.shop.web.controller.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import toy.shop.oauth.dto.SessionUser;
 import toy.shop.service.OrderService;
-import toy.shop.web.argumentresolver.Login;
-import toy.shop.web.dtorequest.OrderRequestDto;
-import toy.shop.web.dtoresponse.OrderResponseDto;
+import toy.shop.web.dto.dtorequest.OrderRequestDto;
+import toy.shop.web.dto.dtoresponse.OrderResponseDto;
 
 import java.util.List;
 
@@ -17,11 +15,11 @@ public class OrderApiController {
     private final OrderService orderService;
 
     @PostMapping("/api/order/new")
-    public Long order(OrderRequestDto orderRequestDto, @Login SessionUser sessionUser) {
+    public Long order(OrderRequestDto orderRequestDto) {
         System.out.println("orderRequestDto = " + orderRequestDto);
 
         Long orderId = orderService.orderOne(orderRequestDto.getDeliveryAddress(),
-                orderRequestDto.getItemId(),orderRequestDto.getQuantity(), sessionUser.getId());
+                orderRequestDto.getItemId(),orderRequestDto.getQuantity(), null);
 
         return orderId;
     }

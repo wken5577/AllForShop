@@ -2,6 +2,7 @@ package toy.shop.web.controller;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,12 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import toy.shop.entity.ItemImages;
-import toy.shop.oauth.dto.SessionUser;
+import toy.shop.security.dto.PrincipalDetail;
 import toy.shop.service.ItemService;
-import toy.shop.web.argumentresolver.Login;
-import toy.shop.web.dtorequest.ItemCreateDto;
-import toy.shop.web.dtoresponse.*;
+import toy.shop.web.dto.UserDto;
+import toy.shop.web.dto.dtorequest.ItemCreateDto;
+import toy.shop.web.dto.dtoresponse.*;
 import toy.shop.service.CategoryService;
+import toy.shop.web.dto.dtoresponse.item.DetailItemResponseDto;
 import toy.shop.web.filestore.FileStore;
 
 import java.io.IOException;
@@ -37,26 +39,26 @@ public class ItemController {
     }
 
     @GetMapping("/item/new")
-    public String getItemForm(Model model, @Login SessionUser sessionUser) {
+    public String getItemForm(Model model) {
 
         List<CategoryResponseDto> result = categoryService.findAllDto();
         ItemCreateDto itemCreateDto = new ItemCreateDto();
 
         model.addAttribute("item", itemCreateDto);
         model.addAttribute("categories", result);
-        model.addAttribute("user",sessionUser);
 
-        return "item-create-form";
+
+        return "item/item-create-form";
     }
 
     @PostMapping("/item/new")
-    public String saveItem(ItemCreateDto itemCreateDto, @Login SessionUser sessionUser) throws IOException {
+    public String saveItem(ItemCreateDto itemCreateDto, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         List<MultipartFile> file = itemCreateDto.getFile();
         List<ItemImages> itemImages = fileStore.storeFiles(file);
+        UserDto user = principalDetail.getUser();
 
-
-        itemService.addItem(sessionUser.getId(), itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
-                itemCreateDto.getPrice(), itemCreateDto.getQuantity(),itemImages, itemCreateDto.getItemInfo());
+        itemService.addItem(user.getUsername(), itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
+                itemCreateDto.getPrice(),itemImages, itemCreateDto.getItemInfo());
 
         return "redirect:/";
     }
@@ -64,15 +66,14 @@ public class ItemController {
 
 
     @GetMapping("/item/{itemId}")
-    public String getItemDetail(@Login SessionUser sessionUser, @PathVariable Long itemId, Model model) {
-        model.addAttribute("user", sessionUser);
+    public String getItemDetail(@PathVariable Long itemId, Model model) {
 
         List<CategoryResponseDto> categories = categoryService.findAllDto();
         model.addAttribute("categories", categories);
 
         DetailItemResponseDto item = itemService.findById(itemId);
         model.addAttribute("item", item);
-        return "item-detail";
+        return "item/item-detail";
     }
 
 

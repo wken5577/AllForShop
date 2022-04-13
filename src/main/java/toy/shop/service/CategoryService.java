@@ -3,7 +3,7 @@ package toy.shop.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import toy.shop.repository.CategoryRepository;
-import toy.shop.web.dtoresponse.*;
+import toy.shop.web.dto.dtoresponse.*;
 
 import java.util.List;
 import java.util.stream.Collectors;

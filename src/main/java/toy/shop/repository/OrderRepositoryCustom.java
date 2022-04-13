@@ -1,7 +1,7 @@
 package toy.shop.repository;
 
 
-import toy.shop.web.dtoresponse.OrderResponseDto;
+import toy.shop.web.dto.dtoresponse.OrderResponseDto;
 
 import java.util.List;
 

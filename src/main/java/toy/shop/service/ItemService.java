@@ -1,6 +1,8 @@
 package toy.shop.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import toy.shop.entity.Category;
@@ -10,9 +12,8 @@ import toy.shop.entity.User;
 import toy.shop.repository.CategoryRepository;
 import toy.shop.repository.ItemRepository;
 import toy.shop.repository.UserRepository;
-import toy.shop.web.dtoresponse.AdminItemResponseDto;
-import toy.shop.web.dtoresponse.DetailItemResponseDto;
-import toy.shop.web.dtoresponse.IndexItemResponseDto;
+import toy.shop.web.dto.dtoresponse.item.DetailItemResponseDto;
+import toy.shop.web.dto.dtoresponse.item.IndexItemResponseDto;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,15 +27,15 @@ public class ItemService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    public Long addItem(Long userId, Long categoryId, String name, int price, int quantity, List<ItemImages> itemImages, String itemInfo) {
-        User findUser = userRepository.findById(userId).orElseThrow(
+    public Long addItem(String username, Long categoryId, String name, int price, List<ItemImages> itemImages, String itemInfo) {
+        User findUser = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalStateException("회원 정보가 없습니다."));
 
         Category findCategory = categoryRepository.findById(categoryId).orElseThrow(
                 () -> new IllegalStateException("카테고리 정보가 없습니다.")
         );
 
-        Item item = new Item(findCategory, name, price, quantity, findUser, itemImages, itemInfo);
+        Item item = new Item(findCategory, name, price, findUser, itemImages, itemInfo);
         itemRepository.save(item);
 
         return item.getId();
@@ -60,24 +61,23 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<IndexItemResponseDto> findItemsByCategory(Long categoryId) {
-        List<Item> findItems = itemRepository.findByCategoryId(categoryId);
+    public Page<IndexItemResponseDto> findItemsByCategory(Long categoryId, Pageable pageable) {
+        Page<Item> findItems = itemRepository.findByCategoryId(categoryId, pageable);
 
-        List<IndexItemResponseDto> result = findItems.stream()
-                .map(IndexItemResponseDto::new).collect(Collectors.toList());
+        Page<IndexItemResponseDto> result = findItems.map(IndexItemResponseDto::new);
 
         return result;
     }
 
     @Transactional(readOnly = true)
-    public List<IndexItemResponseDto> findAll() {
-        List<Item> findItems = itemRepository.findAll();
-        List<IndexItemResponseDto> result = findItems.stream().
-                map(IndexItemResponseDto::new).collect(Collectors.toList());
+    public Page<IndexItemResponseDto> findAll(Pageable pageable) {
+        Page<Item> itemPage = itemRepository.findAll(pageable);
+        Page<IndexItemResponseDto> items = itemPage.map(IndexItemResponseDto::new);
 
-        return result;
+        return items;
     }
 
+    @Transactional(readOnly = true)
     public DetailItemResponseDto findById(Long itemId) {
         DetailItemResponseDto item = itemRepository.findById(itemId)
                 .map(DetailItemResponseDto::new).get();
@@ -85,10 +85,4 @@ public class ItemService {
         return item;
     }
 
-    public List<AdminItemResponseDto> getItemsByUser(Long userId) {
-        List<Item> result = itemRepository.findByUserId(userId);
-        List<AdminItemResponseDto> items = result.stream().map(AdminItemResponseDto::new).collect(Collectors.toList());
-
-        return items;
-    }
 }

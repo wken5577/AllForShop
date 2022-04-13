@@ -12,11 +12,10 @@ import toy.shop.entity.User;
 import toy.shop.repository.ItemRepository;
 import toy.shop.repository.OrderRepository;
 import toy.shop.repository.UserRepository;
-import toy.shop.web.dtoresponse.OrderResponseDto;
+import toy.shop.web.dto.dtoresponse.OrderResponseDto;
 
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
