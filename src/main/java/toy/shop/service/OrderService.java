@@ -9,13 +9,14 @@ import toy.shop.entity.Order;
 
 import toy.shop.entity.OrderItem;
 import toy.shop.entity.User;
-import toy.shop.repository.ItemRepository;
-import toy.shop.repository.OrderRepository;
+import toy.shop.repository.item.ItemRepository;
+import toy.shop.repository.order.OrderRepository;
 import toy.shop.repository.UserRepository;
 import toy.shop.web.dto.dtoresponse.OrderResponseDto;
 
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +28,9 @@ public class OrderService {
     private final UserRepository userRepository;
 
 
-    public Long orderOne(String deliveryAddress,Long itemId, int quantity, Long userId) {
-        User findUser = userRepository.getById(userId);
+    public Long orderOne(String deliveryAddress,Long itemId, int quantity, String username) {
+        User findUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("사용자가 존제하지 않습니다. " + username));
         Item findItem = itemRepository.getById(itemId);
 
         OrderItem orderItem = OrderItem.orderItem(findItem, findItem.getPrice(), quantity);

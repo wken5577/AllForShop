@@ -17,7 +17,7 @@ import toy.shop.web.dto.UserDto;
 import toy.shop.web.dto.dtorequest.ItemCreateDto;
 import toy.shop.web.dto.dtoresponse.*;
 import toy.shop.service.CategoryService;
-import toy.shop.web.dto.dtoresponse.item.DetailItemResponseDto;
+import toy.shop.web.dto.dtoresponse.ItemResponseDto;
 import toy.shop.web.filestore.FileStore;
 
 import java.io.IOException;
@@ -68,10 +68,7 @@ public class ItemController {
     @GetMapping("/item/{itemId}")
     public String getItemDetail(@PathVariable Long itemId, Model model) {
 
-        List<CategoryResponseDto> categories = categoryService.findAllDto();
-        model.addAttribute("categories", categories);
-
-        DetailItemResponseDto item = itemService.findById(itemId);
+        ItemResponseDto item = itemService.findById(itemId);
         model.addAttribute("item", item);
         return "item/item-detail";
     }

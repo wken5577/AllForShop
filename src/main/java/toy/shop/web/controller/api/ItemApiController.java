@@ -6,8 +6,6 @@ import toy.shop.entity.ItemImages;
 import toy.shop.service.CategoryService;
 import toy.shop.service.ItemService;
 import toy.shop.web.dto.dtorequest.ItemCreateDto;
-import toy.shop.web.dto.dtoresponse.item.DetailItemResponseDto;
-import toy.shop.web.dto.dtoresponse.item.IndexItemResponseDto;
 import toy.shop.web.filestore.FileStore;
 
 import java.io.IOException;
@@ -37,14 +35,6 @@ public class ItemApiController {
 
         return savedItemId;
     }
-
-    @GetMapping("/api/item/{itemId}")
-    public DetailItemResponseDto getItemDetail(@PathVariable Long itemId) {
-        DetailItemResponseDto item = itemService.findById(itemId);
-
-        return item;
-    }
-
 
 
 

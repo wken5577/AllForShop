@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragment/head :: header}">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>document</title>
+    </head>
+
+    <body>
+        <th:block th:replace="~{fragment/navbar :: navbar}"></th:block>
+
+        <!-- Product section-->
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6">
+                        <img class="card-img-top mb-5 mb-md-0"
+                             th:src ="|/img/${item.storeFileName}|"
+                             src="https://dummyimage.com/600x700/dee2e6/6c757d.jpg" alt="..." />
+                    </div>
+                    <div class="col-md-6">
+                        <label for="title" class="form-label">상품명:</label>
+                        <input type="text" class="form-control mb-2" id="title" th:value = "${item.name}" disabled >
+                        <label for="price" class="form-label">가격:</label>
+                        <input type="number" class="form-control mb-2" id="price" th:value = "${item.price}" disabled>
+
+                        <label for="quantity" class="form-label">수량:</label>
+                        <input type="number" class="form-control mb-2" id="quantity">
+
+                        <label for="address" class="form-label">주소:</label>
+                        <input type="address" class="form-control mb-2" id="address">
+
+                        <label for="address-detail" class="form-label"> 상세주소:</label>
+                        <input type="address" class="form-control mb-4" id="address-detail">
+
+                        <div class="d-flex">
+                            <button type = "button" class="btn btn-outline-dark flex-shrink-0 order" id = "order-btn" th:onclick="|order(${item.itemId})|">
+                                    Order
+                            </button>
+                            <input type="radio" class="form-check-input" id="order" name="order-type" value="normal">
+                            <label class="form-check-label me-10" for="order"> 무통장 입금 </label>
+
+                            <input type="radio" class="form-check-input" id="order-card" name="order-type" value="card">
+                            <label class="form-check-label" for="order-card"> 카드 결제 </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script>
+                window.onload = function(){
+                    document.getElementById("address").addEventListener("click", function(){ //주소입력칸을 클릭하면 카카오 지도 발생
+                        new daum.Postcode({
+                            oncomplete: function(data) { //선택시 입력값 세팅
+                                document.getElementById("address").value = data.address; // 주소 넣기
+                                document.querySelector("input[id=address-detail]").focus(); //상세입력 포커싱
+                            }
+                        }).open();
+                    });
+                }
+        </script>
+
+        <th:block th:replace="~{fragment/footer_js :: script}"></th:block>
+        <script src = "/js/order.js"></script>
+
+        <!-- iamport.payment.js -->
+        <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+
+    </body>
+</html>

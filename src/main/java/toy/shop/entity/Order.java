@@ -34,7 +34,7 @@ public class Order {
 
     private int totalPrice;
 
-    public Order(User user,String deliveryAddress) {
+    private Order(User user,String deliveryAddress) {
         this.user = user;
         this.deliveryStatus = DeliveryStatus.PREPARING;
         this.orderStatus = OrderStatus.ORDER;

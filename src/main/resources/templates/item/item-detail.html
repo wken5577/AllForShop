@@ -11,8 +11,6 @@
     <body>
         <th:block th:replace="~{fragment/navbar :: navbar}"></th:block>
 
-        <th:block th:replace="~{fragment/navbar :: sub-navbar}"></th:block>
-
         <!-- Product section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 my-5">
@@ -26,7 +24,7 @@
                         <div class="small mb-1">SKU: BST-498</div>
                         <h1 class="display-5 fw-bolder" th:text = "${item.name}">Shop item template</h1>
                         <div class="mb-5">
-                            <span th:text = "|${{item.price}}원|">6,300원</span>
+                            <span th:text = "|${{item.price}}₩|">6,300원</span>
                         </div>
 
                         <p class="lead" th:text = "${item.info}">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at
@@ -34,15 +32,14 @@
                             eius blanditiis delectus ipsam minima ea iste laborum vero?</p>
 
                         <div class="d-flex">
-                            <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" />
                             <button class="btn btn-outline-dark flex-shrink-0" type="button">
                                 <i class="bi-cart-fill me-1"></i>
                                 Add to cart
                             </button>
-                            <button class="btn btn-outline-dark flex-shrink-0 order" type="button" onclick="order();">
-                                <i class="bi-cart-fill me-1"></i>
-                                Order
-                            </button>
+                            <a class="btn btn-outline-dark flex-shrink-0 order" th:href = "@{/order/{itemId}(itemId = ${item.itemId})}">
+                                    Order
+                            </a>
+
                         </div>
                     </div>
                 </div>

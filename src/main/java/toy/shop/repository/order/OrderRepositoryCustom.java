@@ -1,4 +1,4 @@
-package toy.shop.repository;
+package toy.shop.repository.order;
 
 
 import toy.shop.web.dto.dtoresponse.OrderResponseDto;

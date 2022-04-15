@@ -3,24 +3,25 @@ package toy.shop.web.controller;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import toy.shop.service.ItemService;
 import toy.shop.service.OrderService;
-import toy.shop.web.dto.dtorequest.OrderRequestDto;
+import toy.shop.web.dto.dtoresponse.ItemResponseDto;
 
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
+    private final ItemService itemService;
 
-    @PostMapping("/order")
-    public String order(OrderRequestDto orderRequestDto) {
-        System.out.println("orderRequestDto = " + orderRequestDto);
+    @GetMapping("/order/{itemId}")
+    public String orderPage(Model model, @PathVariable Long itemId) {
+        ItemResponseDto item = itemService.findById(itemId);
+        model.addAttribute("item", item);
 
-        Long orderId = orderService.orderOne(orderRequestDto.getDeliveryAddress(),
-                orderRequestDto.getItemId(),orderRequestDto.getQuantity(), null);
-
-        return "redirect:/";
+        return "/order/orderForm";
     }
 
 }

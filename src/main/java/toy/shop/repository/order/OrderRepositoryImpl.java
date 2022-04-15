@@ -1,4 +1,4 @@
-package toy.shop.repository;
+package toy.shop.repository.order;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -52,8 +52,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
 
     public List<OrderItemsDto> getOrderItemsDtos(List<Long> orderIds) {
-
-
         List<OrderItemsDto> orderItems = queryFactory
                 .select(
                         Projections.constructor(OrderItemsDto.class, orderItem.order.id,
@@ -66,6 +64,4 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
         return orderItems;
     }
-
-
 }

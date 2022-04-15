@@ -10,13 +10,11 @@ import toy.shop.entity.Item;
 import toy.shop.entity.ItemImages;
 import toy.shop.entity.User;
 import toy.shop.repository.CategoryRepository;
-import toy.shop.repository.ItemRepository;
+import toy.shop.repository.item.ItemRepository;
 import toy.shop.repository.UserRepository;
-import toy.shop.web.dto.dtoresponse.item.DetailItemResponseDto;
-import toy.shop.web.dto.dtoresponse.item.IndexItemResponseDto;
+import toy.shop.web.dto.dtoresponse.ItemResponseDto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,26 +59,26 @@ public class ItemService {
     }
 
     @Transactional(readOnly = true)
-    public Page<IndexItemResponseDto> findItemsByCategory(Long categoryId, Pageable pageable) {
+    public Page<ItemResponseDto> findItemsByCategory(Long categoryId, Pageable pageable) {
         Page<Item> findItems = itemRepository.findByCategoryId(categoryId, pageable);
 
-        Page<IndexItemResponseDto> result = findItems.map(IndexItemResponseDto::new);
+        Page<ItemResponseDto> result = findItems.map(ItemResponseDto::new);
 
         return result;
     }
 
     @Transactional(readOnly = true)
-    public Page<IndexItemResponseDto> findAll(Pageable pageable) {
+    public Page<ItemResponseDto> findAll(Pageable pageable) {
         Page<Item> itemPage = itemRepository.findAll(pageable);
-        Page<IndexItemResponseDto> items = itemPage.map(IndexItemResponseDto::new);
+        Page<ItemResponseDto> items = itemPage.map(ItemResponseDto::new);
 
         return items;
     }
 
     @Transactional(readOnly = true)
-    public DetailItemResponseDto findById(Long itemId) {
-        DetailItemResponseDto item = itemRepository.findById(itemId)
-                .map(DetailItemResponseDto::new).get();
+    public ItemResponseDto findById(Long itemId) {
+        ItemResponseDto item = itemRepository.findById(itemId)
+                .map(ItemResponseDto::new).get();
 
         return item;
     }

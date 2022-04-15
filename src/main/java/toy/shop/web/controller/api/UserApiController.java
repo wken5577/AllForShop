@@ -23,8 +23,14 @@ public class UserApiController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(new UserErrorDto(bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);
         }
-        Long id = userService.save(userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
-        return new ResponseEntity(id, HttpStatus.OK);
+
+        try{
+            Long id = userService.save(userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
+            return new ResponseEntity(id, HttpStatus.OK);
+
+        }catch (IllegalStateException e){
+            return new ResponseEntity(new UserErrorDto("username", e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

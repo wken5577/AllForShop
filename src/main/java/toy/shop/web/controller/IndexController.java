@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import toy.shop.service.CategoryService;
 import toy.shop.service.ItemService;
 import toy.shop.web.dto.dtoresponse.CategoryResponseDto;
-import toy.shop.web.dto.dtoresponse.item.IndexItemResponseDto;
+import toy.shop.web.dto.dtoresponse.ItemResponseDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class IndexController {
         List<CategoryResponseDto> categories = categoryService.findAllDto();
         model.addAttribute("categories", categories);
 
-        Page<IndexItemResponseDto> result = itemService.findAll(Pageable);
+        Page<ItemResponseDto> result = itemService.findAll(Pageable);
         model.addAttribute("items",result);
 
         List<Integer> pageNumbers = new ArrayList<>();
@@ -46,7 +46,7 @@ public class IndexController {
         List<CategoryResponseDto> categories = categoryService.findAllDto();
         model.addAttribute("categories", categories);
 
-        Page<IndexItemResponseDto> result = itemService.findItemsByCategory(cgId, Pageable);
+        Page<ItemResponseDto> result = itemService.findItemsByCategory(cgId, Pageable);
         model.addAttribute("items",result);
 
         List<Integer> pageNumbers = new ArrayList<>();

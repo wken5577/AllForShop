@@ -21,4 +21,10 @@ public class UserErrorDto {
             errorField.put(fieldError.getField(),fieldError.getDefaultMessage());
         }
     }
+
+    public UserErrorDto (String field, String msg){
+        errorField = new HashMap<>();
+        errorField.put(field,msg);
+    }
+
 }
