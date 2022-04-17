@@ -15,7 +15,6 @@ public class OrderRequestDto {
     private Long itemId;
     private String deliveryAddress;
     private String imp_uid;
-    private Long paid_amount;
 
     public OrderRequestDto(int quantity, Long itemId, String deliveryAddress) {
         this.quantity = quantity;

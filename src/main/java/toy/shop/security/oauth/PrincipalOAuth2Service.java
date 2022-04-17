@@ -30,11 +30,10 @@ public class PrincipalOAuth2Service extends DefaultOAuth2UserService {
         User user = oAuth2Provider.makeUser(provider, attributes);
         Optional<User> userEntity = userRepository.findByUsername(user.getUsername());
         if (!userEntity.isEmpty()) {
-            return new PrincipalDetail(new UserDto(user),attributes);
+            return new PrincipalDetail(new UserDto(userEntity.get()),attributes);
         }
 
         userRepository.save(user);
-
         return new PrincipalDetail(new UserDto(user),attributes);
     }
 }

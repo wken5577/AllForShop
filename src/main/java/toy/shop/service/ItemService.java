@@ -15,6 +15,7 @@ import toy.shop.repository.UserRepository;
 import toy.shop.web.dto.dtoresponse.ItemResponseDto;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,20 +39,6 @@ public class ItemService {
 
         return item.getId();
     }
-
-    public Long updateItem(Long categoryId, Long itemId, String name, int price, int quantity) {
-        Category findCategory = categoryRepository.findById(categoryId).orElseThrow(
-                () -> new IllegalStateException("카테고리 정보가 없습니다.")
-        );
-
-        Item target = itemRepository.findById(itemId).orElseThrow(
-                () -> new IllegalStateException("상품 정보가 없습니다."));
-
-        target.update(findCategory,name,price,quantity);
-
-        return target.getId();
-    }
-
 
     public Long deleteItem(Long itemId) {
         itemRepository.deleteById(itemId);
@@ -83,4 +70,9 @@ public class ItemService {
         return item;
     }
 
+    public long getItemPrice(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다."));
+        return item.getPrice();
+    }
 }

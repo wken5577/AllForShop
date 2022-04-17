@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="~{fragment/head :: header}">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -36,9 +36,13 @@
                         <input type="address" class="form-control mb-4" id="address-detail">
 
                         <div class="d-flex">
-                            <button type = "button" class="btn btn-outline-dark flex-shrink-0 order" id = "order-btn" th:onclick="|order(${item.itemId})|">
-                                    Order
-                            </button>
+                            <th:block sec:authorize = "isAuthenticated()">
+                                <button type = "button" class="btn btn-outline-dark flex-shrink-0 order" id = "order-btn"
+                                        th:data-parameter1="${item.itemId}" th:data-parameter2="${#authentication.principal.user.email}"
+                                        th:onclick="order(this.getAttribute('data-parameter1'), this.getAttribute('data-parameter2'))">
+                                        Order
+                                </button>
+                            </th:block>
                             <input type="radio" class="form-check-input" id="order" name="order-type" value="normal">
                             <label class="form-check-label me-10" for="order"> 무통장 입금 </label>
 

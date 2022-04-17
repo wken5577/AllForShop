@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -35,7 +36,6 @@ public class Item extends BaseEntity{
 
     private int price;
 
-
     public Item(Category category, String name, int price, User user, List<ItemImages> itemImages, String itemInfo) {
         this.user = user;
         this.category = category;
@@ -47,10 +47,9 @@ public class Item extends BaseEntity{
         for (ItemImages itemImage : itemImages) {
             itemImage.setItem(this);
         }
-
     }
 
-    public void update(Category category,String name, int price, int quantity){
+    public void update(Category category,String name, int price){
         this.category = category;
         this.name = name;
         this.price = price;

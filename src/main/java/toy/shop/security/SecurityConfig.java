@@ -18,6 +18,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .headers().frameOptions().disable()
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(ajaxAwareAuthenticationEntryPoint("/loginForm"))
+                .and()
                     .authorizeRequests()
                     .antMatchers("/", "/css/**", "/images/**", "/js/**","/img/**","/item/**", "/loginForm", "/join","/category").permitAll()
                     .anyRequest().authenticated()
@@ -34,6 +37,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .defaultSuccessUrl("/")
                             .userInfoEndpoint()
                                 .userService(oAuth2Service);
-
     }
+
+    /**
+     * 인증되지 않은 요청중 AJAX요청일 경우 403으로 응답, AJAX요청이 아닐 경우 login으로 리다이렉트
+     * * @param url * @return
+     * */
+    private AjaxAwareAuthenticationEntryPoint ajaxAwareAuthenticationEntryPoint(String url) {
+        return new AjaxAwareAuthenticationEntryPoint(url);
+    }
+
 }
