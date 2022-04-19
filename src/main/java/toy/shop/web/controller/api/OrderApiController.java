@@ -1,6 +1,7 @@
 package toy.shop.web.controller.api;
 
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,12 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import toy.shop.repository.item.ItemRepository;
 import toy.shop.security.dto.PrincipalDetail;
+import toy.shop.service.BasketService;
 import toy.shop.service.ItemService;
 import toy.shop.service.OrderService;
+import toy.shop.web.dto.dtorequest.BasketOrderRequestDto;
 import toy.shop.web.dto.dtorequest.OrderRequestDto;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +29,7 @@ public class OrderApiController {
 
     private final OrderService orderService;
     private final ItemService itemService;
+    private final BasketService basketService;
 
     @PostMapping("/api/order")
     public ResponseEntity order(@RequestBody OrderRequestDto orderRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
@@ -36,11 +43,7 @@ public class OrderApiController {
     public ResponseEntity orderPayment(@RequestBody OrderRequestDto orderRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) throws  URISyntaxException {
 
         ResponseEntity<String> responseToken = requestToken();
-
-        String responseBody = responseToken.getBody();
-        JSONObject jsonObject = new JSONObject(responseBody);
-        JSONObject response = (JSONObject) jsonObject.get("response");
-        Object access_token = response.get("access_token");
+        Object access_token = getAccessToken(responseToken);
 
         ResponseEntity<String> validationData =  getPaymentData(access_token, orderRequestDto.getImp_uid());
 
@@ -55,6 +58,55 @@ public class OrderApiController {
         }
 
         return ResponseEntity.ok(1L);
+    }
+
+    @PostMapping("/basket/order")
+    public ResponseEntity orderBasketItems(@RequestBody BasketOrderRequestDto basketOrderRequestDto,
+                                           @AuthenticationPrincipal PrincipalDetail principalDetail) {
+
+        String deliveryAddress = basketOrderRequestDto.getDeliveryAddress();
+        List<OrderRequestDto> itemArr = basketOrderRequestDto.getItemArr();
+
+        Long orderId = orderService.order(itemArr, deliveryAddress, principalDetail.getUsername());
+
+        List<Long> itemIds = itemArr.stream().map(i -> i.getItemId()).collect(Collectors.toList());
+        basketService.deleteBasketItem(itemIds, principalDetail.getUsername());
+
+        return ResponseEntity.ok(orderId);
+    }
+
+    @PostMapping("/basket/order/payment")
+    public ResponseEntity orderBasketItemsPayment(@RequestBody BasketOrderRequestDto basketOrderRequestDto,
+                                           @AuthenticationPrincipal PrincipalDetail principalDetail) throws URISyntaxException {
+
+        ResponseEntity<String> responseToken = requestToken();
+        Object access_token = getAccessToken(responseToken);
+
+        ResponseEntity<String> paymentData = getPaymentData(access_token, basketOrderRequestDto.getImp_uid());
+        long orderPrice  = basketOrderRequestDto.getTotalPrice();
+
+        boolean validationPayment = validationPayment(paymentData, orderPrice);
+
+        if(validationPayment){
+            String deliveryAddress = basketOrderRequestDto.getDeliveryAddress();
+            List<OrderRequestDto> itemArr = basketOrderRequestDto.getItemArr();
+
+            Long orderId = orderService.order(itemArr, deliveryAddress, principalDetail.getUsername());
+
+            List<Long> itemIds = itemArr.stream().map(i -> i.getItemId()).collect(Collectors.toList());
+            basketService.deleteBasketItem(itemIds, principalDetail.getUsername());
+
+            return ResponseEntity.ok(orderId);
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    private Object getAccessToken(ResponseEntity<String> responseToken) {
+        String responseBody = responseToken.getBody();
+        JSONObject jsonObject = new JSONObject(responseBody);
+        JSONObject response = (JSONObject) jsonObject.get("response");
+        Object access_token = response.get("access_token");
+        return access_token;
     }
 
     private boolean validationPayment(ResponseEntity<String> validationData, long orderPrice) {

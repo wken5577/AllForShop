@@ -1,15 +1,19 @@
 package toy.shop.web.controller.api;
 
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import toy.shop.security.dto.PrincipalDetail;
 import toy.shop.service.BasketService;
+
+import java.util.ArrayList;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,6 +38,25 @@ public class BasketApiController {
         }
 
         return ResponseEntity.ok(result);
+    }
+
+
+    @DeleteMapping("/basket")
+    public ResponseEntity deleteBasketItem(@RequestBody String idsJsonArray, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        JSONObject jsonObject = new JSONObject(idsJsonArray);
+        JSONArray jsonArray = jsonObject.getJSONArray("ids");
+        ArrayList<Long> ids = new ArrayList();
+
+        for (Object o : jsonArray) {
+            ids.add(Long.valueOf(o.toString()));
+        }
+
+        Long result = basketService.deleteBasketItem(ids, principalDetail.getUsername());
+        if(result > 0){
+            return ResponseEntity.ok(result);
+        }
+
+        else return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
 

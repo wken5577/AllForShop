@@ -12,10 +12,13 @@ import toy.shop.entity.User;
 import toy.shop.repository.CategoryRepository;
 import toy.shop.repository.item.ItemRepository;
 import toy.shop.repository.UserRepository;
+import toy.shop.web.dto.dtoresponse.BasketItemDto;
 import toy.shop.web.dto.dtoresponse.ItemResponseDto;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -70,9 +73,19 @@ public class ItemService {
         return item;
     }
 
+    @Transactional(readOnly = true)
     public long getItemPrice(Long itemId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다."));
         return item.getPrice();
+    }
+
+    @Transactional(readOnly = true)
+    public List<BasketItemDto> findByIds(ArrayList<Long> ids) {
+        List<Item> findItems = itemRepository.findAllById(ids);
+        List<BasketItemDto> result = findItems.stream().map(BasketItemDto::new)
+                .collect(Collectors.toList());
+
+        return result;
     }
 }

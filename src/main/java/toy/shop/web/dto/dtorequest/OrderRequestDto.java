@@ -21,4 +21,10 @@ public class OrderRequestDto {
         this.itemId = itemId;
         this.deliveryAddress = deliveryAddress;
     }
+
+    public OrderRequestDto(int quantity, Long itemId) {
+        this.quantity = quantity;
+        this.itemId = itemId;
+    }
+
 }

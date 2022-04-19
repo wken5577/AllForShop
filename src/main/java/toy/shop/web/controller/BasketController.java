@@ -7,8 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import toy.shop.security.dto.PrincipalDetail;
 import toy.shop.service.BasketService;
+import toy.shop.service.ItemService;
 import toy.shop.web.dto.dtoresponse.BasketItemDto;
-
 import java.util.List;
 
 @Controller
@@ -16,15 +16,16 @@ import java.util.List;
 public class BasketController {
 
     private final BasketService basketService;
+    private final ItemService itemService;
 
     @GetMapping("/mybasket")
     public String getBasket(@AuthenticationPrincipal PrincipalDetail principalDetail, Model model) {
         List<BasketItemDto> result = basketService.getUserBasketItems(principalDetail.getUser().getUsername());
-        System.out.println("result = " + result);
 
         model.addAttribute("items", result);
         return "/basket/basketList";
     }
+
 
 
 }

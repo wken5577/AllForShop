@@ -12,11 +12,15 @@ import toy.shop.entity.User;
 import toy.shop.repository.item.ItemRepository;
 import toy.shop.repository.order.OrderRepository;
 import toy.shop.repository.UserRepository;
+import toy.shop.web.dto.dtorequest.OrderRequestDto;
 import toy.shop.web.dto.dtoresponse.OrderResponseDto;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -56,5 +60,23 @@ public class OrderService {
     }
 
 
+    public Long order(List<OrderRequestDto> itemArr, String deliveryAddress, String username) {
+        User findUser = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("사용자가 존제하지 않습니다. " + username));
 
+        List<Long> itemIds = itemArr.stream().map(i -> i.getItemId()).collect(Collectors.toList());
+        itemRepository.findAllById(itemIds);
+        List<OrderItem> orderItems = new ArrayList<>();
+
+        for (OrderRequestDto orderRequestDto : itemArr) {
+            Item item = itemRepository.getById(orderRequestDto.getItemId());
+            OrderItem orderItem = OrderItem.orderItem(item, item.getPrice(), orderRequestDto.getQuantity());
+            orderItems.add(orderItem);
+        }
+
+        Order order = Order.order(findUser, deliveryAddress, orderItems);
+        orderRepository.save(order);
+
+        return order.getId();
+    }
 }

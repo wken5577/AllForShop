@@ -7,7 +7,7 @@ import toy.shop.entity.BasketItem;
 import toy.shop.entity.Item;
 import toy.shop.entity.ShopBasket;
 import toy.shop.entity.User;
-import toy.shop.repository.BasketRepository;
+import toy.shop.repository.basket.BasketRepository;
 import toy.shop.repository.UserRepository;
 import toy.shop.repository.item.ItemRepository;
 import toy.shop.web.dto.dtoresponse.BasketItemDto;
@@ -51,6 +51,7 @@ public class BasketService {
 
     }
 
+    @Transactional(readOnly = true)
     public List<BasketItemDto> getUserBasketItems(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다."));
@@ -64,5 +65,18 @@ public class BasketService {
         }
 
         return new ArrayList<>();
+    }
+
+    public Long deleteBasketItem(List<Long> ids, String username) {
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다."));
+
+        ShopBasket shopBasket = basketRepository.findByUserId(user.getId()).orElse(null);
+        if (shopBasket != null) {
+            return basketRepository.deleteItemsByIds(shopBasket.getId(), ids);
+        }
+
+        return -1L;
     }
 }
