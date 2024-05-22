@@ -11,7 +11,7 @@ plugins {
 	id 'java'
 }
 
-group = 'toy'
+group = 'all-for-shop'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
