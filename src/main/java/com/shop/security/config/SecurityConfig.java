@@ -1,18 +1,24 @@
-package com.shop.security;
+package com.shop.security.config;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.shop.security.entrypoint.RestAuthenticationEntryPoint;
+import com.shop.security.authhandlers.MyAuthenticationFailureHandler;
+import com.shop.security.authhandlers.RestAuthenticationEntryPoint;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+	private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -25,7 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.authorizeRequests()
 			.antMatchers("/", "/css/**", "/images/**", "/js/**", "/img/**", "/item/**", "/loginForm", "/join",
-				"/category", "/h2-console/**").permitAll()
+				"/category", "/h2-console/**", "/swagger-ui/**", "/swagger-ui**", "/v3/api-docs/**", "/v3/api-docs**", "/api-docs").permitAll()
 			.anyRequest().authenticated()
 			.and()
 			.formLogin()
@@ -37,8 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logoutSuccessUrl("/")
 			.and()
 			.oauth2Login()
-			.defaultSuccessUrl("/");
+			.defaultSuccessUrl("/")
+			.failureHandler(myAuthenticationFailureHandler);
 
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return  new BCryptPasswordEncoder();
 	}
 
 }

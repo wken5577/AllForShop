@@ -1,4 +1,4 @@
-package com.shop.security.entrypoint;
+package com.shop.security.authhandlers;
 
 import java.io.IOException;
 

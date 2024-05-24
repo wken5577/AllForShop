@@ -18,9 +18,9 @@ public class Category {
     @Id @GeneratedValue(generator = "category_sequence")
     private Long id;
 
-    private String name;
+    private String categoryName;
 
-    public Category(String name) {
-        this.name = name;
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
     }
 }

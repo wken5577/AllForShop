@@ -23,15 +23,16 @@ public class OrderItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    private int price;
+    private int pricePerItem;
 
     private int quantity;
 
+    @Getter
     private int totalPrice;
 
-    private OrderItem(Item item, int price, int quantity, int totalPrice) {
+    private OrderItem(Item item, int pricePerItem, int quantity, int totalPrice) {
         this.item = item;
-        this.price = price;
+        this.pricePerItem = pricePerItem;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
     }
@@ -43,10 +44,5 @@ public class OrderItem {
     public static OrderItem orderItem(Item item, int price, int quantity) {
         return new OrderItem(item, price, quantity, price * quantity);
     }
-
-    public int getTotalPrice() {
-        return price * quantity;
-    }
-
 
 }
