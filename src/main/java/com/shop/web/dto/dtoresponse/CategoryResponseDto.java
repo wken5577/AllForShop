@@ -15,6 +15,6 @@ public class CategoryResponseDto {
 
     public CategoryResponseDto(Category category) {
         this.id = category.getId();
-        this.name = category.getName();
+        this.name = category.getCategoryName();
     }
 }

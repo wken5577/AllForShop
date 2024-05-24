@@ -54,7 +54,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
         List<OrderItemsDto> orderItems = queryFactory
                 .select(
                         Projections.constructor(OrderItemsDto.class, QOrderItem.orderItem.order.id,
-                                QItem.item.name, QOrderItem.orderItem.price, QOrderItem.orderItem.quantity, QOrderItem.orderItem.totalPrice)
+                                QItem.item.name, QOrderItem.orderItem.pricePerItem, QOrderItem.orderItem.quantity, QOrderItem.orderItem.totalPrice)
                 )
                 .from(QOrderItem.orderItem)
                 .join(QOrderItem.orderItem.item, QItem.item)
