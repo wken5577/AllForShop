@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import com.shop.security.authhandlers.MyAuthenticationFailureHandler;
 import com.shop.security.authhandlers.RestAuthenticationEntryPoint;
@@ -21,14 +23,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 	private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
+	private final UserRegisterAuthenticationFilter userRegisterAuthenticationFilter;
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-
 		http
-			.csrf().ignoringAntMatchers("/join") // 회원가입은 csrf 적용하지 않음
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
 			.and()
+			.csrf(csrf -> csrf.ignoringAntMatchers("/join", "/h2-console/**")
+				.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
 			.headers().frameOptions().disable()
 			.and()
 			.exceptionHandling()
@@ -51,18 +55,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.defaultSuccessUrl("/")
 			.failureHandler(myAuthenticationFailureHandler)
 			.and()
-			.addFilterBefore(userRegisterAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+			.addFilterBefore(userRegisterAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
 	}
 
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
-		return  new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public UserRegisterAuthenticationFilter userRegisterAuthenticationFilter() throws Exception {
-		return new UserRegisterAuthenticationFilter();
+		return new BCryptPasswordEncoder();
 	}
 
 }

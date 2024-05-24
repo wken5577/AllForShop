@@ -39,4 +39,12 @@ public class UserService {
 
         return user.getId();
     }
+
+    public void register(String username, Long id) {
+        Optional<User> userEntity = userRepository.findById(id);
+        if(userEntity.isEmpty()) throw new IllegalStateException("존재하지 않는 회원입니다");
+
+        User user = userEntity.get();
+        user.register(username);
+    }
 }

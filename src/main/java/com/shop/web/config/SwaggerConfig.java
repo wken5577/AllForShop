@@ -15,13 +15,23 @@ public class SwaggerConfig {
 	@Bean
 	public OpenAPI springShopOpenAPI() {
 		String sessionSchemeName = "cookieAuth";
-		SecurityRequirement securityRequirement = new SecurityRequirement().addList(sessionSchemeName);
+		String xsrfSchemeName = "xsrfToken";
+
+		SecurityRequirement securityRequirement = new SecurityRequirement()
+			.addList(sessionSchemeName)
+			.addList(xsrfSchemeName);
+
 		Components components = new Components()
 			.addSecuritySchemes(sessionSchemeName, new SecurityScheme()
 				.name(sessionSchemeName)
 				.type(SecurityScheme.Type.APIKEY)
 				.in(SecurityScheme.In.COOKIE)
-				.name("JSESSIONID"));
+				.name("JSESSIONID"))
+			.addSecuritySchemes(xsrfSchemeName, new SecurityScheme()
+				.name(xsrfSchemeName)
+				.type(SecurityScheme.Type.APIKEY)
+				.in(SecurityScheme.In.HEADER)
+				.name("X-XSRF-TOKEN"));
 
 		Server server = new Server();
 		server.setUrl("/");
