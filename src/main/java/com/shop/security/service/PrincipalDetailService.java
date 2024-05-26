@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.shop.entity.User;
-import com.shop.repository.UserRepository;
+import com.shop.user.entity.User;
+import com.shop.user.repository.UserRepository;
 import com.shop.security.dto.PrincipalDetail;
 
 import lombok.RequiredArgsConstructor;

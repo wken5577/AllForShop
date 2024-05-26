@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,8 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.shop.UrlMatchChecker;
-import com.shop.entity.UserStatus;
+import com.shop.common.utils.UrlMatchChecker;
+import com.shop.user.entity.UserStatus;
 import com.shop.security.dto.PrincipalDetail;
 
 import lombok.RequiredArgsConstructor;

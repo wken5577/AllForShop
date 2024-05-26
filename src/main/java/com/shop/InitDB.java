@@ -3,8 +3,8 @@ package com.shop;
 
 import lombok.RequiredArgsConstructor;
 
-import com.shop.entity.Category;
-import com.shop.repository.CategoryRepository;
+import com.shop.item.entity.Category;
+import com.shop.item.repository.CategoryRepository;
 
 import java.util.List;
 

@@ -5,8 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import com.shop.entity.User;
-import com.shop.entity.UserStatus;
+import com.shop.user.entity.User;
+import com.shop.user.entity.UserStatus;
 
 import java.util.ArrayList;
 import java.util.Collection;

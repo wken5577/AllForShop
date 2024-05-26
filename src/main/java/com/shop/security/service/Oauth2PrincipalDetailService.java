@@ -10,7 +10,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import com.shop.security.oauth.OAuth2Provider;
+import com.shop.security.oauthprovider.OAuth2Provider;
 
 @RequiredArgsConstructor
 @Service
