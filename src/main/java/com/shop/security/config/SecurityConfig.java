@@ -45,7 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.and()
 			.formLogin()
 			.loginProcessingUrl("/login")
-			.loginPage("/loginForm")
 			.defaultSuccessUrl("/")
 			.and()
 			.logout()
@@ -56,7 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.failureHandler(myAuthenticationFailureHandler)
 			.and()
 			.addFilterBefore(userRegisterAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-
 	}
 
 	@Bean

@@ -14,19 +14,12 @@ import io.swagger.v3.oas.models.servers.Server;
 public class SwaggerConfig {
 	@Bean
 	public OpenAPI springShopOpenAPI() {
-		String sessionSchemeName = "cookieAuth";
 		String xsrfSchemeName = "xsrfToken";
 
 		SecurityRequirement securityRequirement = new SecurityRequirement()
-			.addList(sessionSchemeName)
 			.addList(xsrfSchemeName);
 
 		Components components = new Components()
-			.addSecuritySchemes(sessionSchemeName, new SecurityScheme()
-				.name(sessionSchemeName)
-				.type(SecurityScheme.Type.APIKEY)
-				.in(SecurityScheme.In.COOKIE)
-				.name("JSESSIONID"))
 			.addSecuritySchemes(xsrfSchemeName, new SecurityScheme()
 				.name(xsrfSchemeName)
 				.type(SecurityScheme.Type.APIKEY)
