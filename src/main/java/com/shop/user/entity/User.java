@@ -43,7 +43,7 @@ public class User extends BaseEntity {
         this.email = email;
         this.socialProvider = socialProvider;
         this.userStatus = userStatus;
-        this.role = Role.USER;
+        this.role = Role.ROLE_USER;
     }
 
     public static User createSocialUser(String providerId, String email, SocialProvider socialProvider) {

@@ -20,30 +20,21 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class UserApiController {
+public class UserController {
 
 	private final UserService userService;
 
 	@PostMapping("/join")
-	public ResponseEntity join(@RequestBody @Validated UserJoinReqDto userDto, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity(new UserErrorDto(bindingResult.getFieldErrors()), HttpStatus.BAD_REQUEST);
-		}
-
-		try {
-			Long id = userService.save(userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
-			return new ResponseEntity(id, HttpStatus.OK);
-
-		} catch (IllegalStateException e) {
-			return new ResponseEntity(new UserErrorDto("username", e.getMessage()), HttpStatus.BAD_REQUEST);
-		}
+	public ResponseEntity<Void> join(@RequestBody @Validated UserJoinReqDto userDto) {
+		userService.save(userDto.getUsername(), userDto.getPassword(), userDto.getEmail());
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PostMapping("/register")
 	public ResponseEntity<Void> register(@RequestBody UserRegisterReqDto reqDto,
 		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail) {
 		userService.register(reqDto.getUsername(), principalDetail.getUser().getId());
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 }

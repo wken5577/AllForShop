@@ -1,7 +1,8 @@
 package com.shop.basket.repository;
 
+import static com.shop.basket.entity.QBasketItem.*;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shop.basket.entity.QBasketItem;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;
@@ -18,8 +19,8 @@ public class BasketRepositoryImpl implements BasketRepositoryCustom {
     public Long deleteItemsByIds(Long shopBasketId, Collection<Long> ids) {
 
         long result = queryFactory
-                .delete(QBasketItem.basketItem)
-                .where(QBasketItem.basketItem.shopBasket.id.eq(shopBasketId).and(QBasketItem.basketItem.item.id.in(ids)))
+                .delete(basketItem)
+                .where(basketItem.shopBasket.id.eq(shopBasketId).and(basketItem.item.id.in(ids)))
                 .execute();
 
         return result;

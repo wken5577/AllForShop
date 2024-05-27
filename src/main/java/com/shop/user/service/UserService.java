@@ -29,15 +29,13 @@ public class UserService {
         }
     }
 
-    public Long save(String username, String password, String email) {
+    public void save(String username, String password, String email) {
         Optional<User> userEntity = userRepository.findByUsername(username);
-        if(!userEntity.isEmpty()) throw new IllegalStateException("이미 존재하는 회원 이름입니다 : " + username);
+        if(userEntity.isPresent()) throw new IllegalStateException("이미 존재하는 회원 이름입니다 : " + username);
 
         String encPwd = passwordEncoder.encode(password);
         User user = User.createNormalUser(username, encPwd, email);
         userRepository.save(user);
-
-        return user.getId();
     }
 
     public void register(String username, Long id) {
