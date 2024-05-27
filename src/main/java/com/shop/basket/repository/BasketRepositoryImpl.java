@@ -1,7 +1,7 @@
 package com.shop.basket.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.shop.entity.QBasketItem;
+import com.shop.basket.entity.QBasketItem;
 
 import javax.persistence.EntityManager;
 import java.util.Collection;

@@ -3,7 +3,6 @@ package com.shop.item.controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.shop.item.entity.ItemImages;
-import com.shop.service.CategoryService;
 import com.shop.item.service.ItemService;
 import com.shop.item.controller.request.ItemCreateDto;
 import com.shop.filestore.FileStore;
@@ -14,12 +13,10 @@ import java.util.List;
 @RestController
 public class ItemApiController {
 
-    private final CategoryService categoryService;
     private final ItemService itemService;
     private final FileStore fileStore;
 
-    public ItemApiController(CategoryService categoryService, ItemService itemService, FileStore fileStore) {
-        this.categoryService = categoryService;
+    public ItemApiController(ItemService itemService, FileStore fileStore) {
         this.itemService = itemService;
         this.fileStore = fileStore;
     }
