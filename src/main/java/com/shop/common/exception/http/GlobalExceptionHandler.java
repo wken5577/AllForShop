@@ -1,6 +1,5 @@
 package com.shop.common.exception.http;
 
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;

@@ -16,15 +16,4 @@ public class OrderRequestDto {
     private String deliveryAddress;
     private String imp_uid;
 
-    public OrderRequestDto(int quantity, Long itemId, String deliveryAddress) {
-        this.quantity = quantity;
-        this.itemId = itemId;
-        this.deliveryAddress = deliveryAddress;
-    }
-
-    public OrderRequestDto(int quantity, Long itemId) {
-        this.quantity = quantity;
-        this.itemId = itemId;
-    }
-
 }

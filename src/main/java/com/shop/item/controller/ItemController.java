@@ -1,0 +1,54 @@
+package com.shop.item.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.shop.common.validator.MultipartFileValidator;
+import com.shop.filestore.FileStore;
+import com.shop.item.controller.request.ItemCreateDto;
+import com.shop.item.entity.ItemImages;
+import com.shop.item.service.ItemService;
+import com.shop.security.dto.PrincipalDetail;
+
+import io.swagger.v3.oas.annotations.Parameter;
+import lombok.RequiredArgsConstructor;
+
+@RestController
+@RequiredArgsConstructor
+public class ItemController {
+
+	private final ItemService itemService;
+	private final FileStore fileStore;
+	private final MultipartFileValidator multipartFileValidator;
+
+	@PostMapping(value = "/item", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Void> saveItem(
+		@Validated @RequestPart("itemCreateData") ItemCreateDto itemCreateDto,
+		@RequestPart("file") List<MultipartFile> file,
+		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail,
+		BindingResult bindingResult
+	) throws IOException, BindException {
+		if (bindingResult.hasErrors() || multipartFileValidator.validate(file, bindingResult)) {
+			throw new BindException(bindingResult);
+		}
+		List<ItemImages> itemImages = fileStore.storeFiles(file);
+
+		itemService.addItem(principalDetail.getUsername(), itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
+			itemCreateDto.getPrice(), itemImages, itemCreateDto.getItemInfo());
+
+		return ResponseEntity.status(HttpStatus.CREATED).build();
+	}
+
+}

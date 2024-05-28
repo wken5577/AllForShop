@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shop.common.exception.http.BadRequestException;
 import com.shop.item.entity.Category;
 import com.shop.item.entity.Item;
 import com.shop.item.entity.ItemImages;
@@ -28,10 +29,10 @@ public class ItemService {
 	public Long addItem(String username, Long categoryId, String name, int price, List<ItemImages> itemImages,
 		String itemInfo) {
 		User findUser = userRepository.findByUsername(username).orElseThrow(
-			() -> new IllegalStateException("회원 정보가 없습니다."));
+			() -> new BadRequestException("회원 정보가 없습니다."));
 
 		Category findCategory = categoryRepository.findById(categoryId).orElseThrow(
-			() -> new IllegalStateException("카테고리 정보가 없습니다.")
+			() -> new BadRequestException("카테고리 정보가 없습니다.")
 		);
 
 		Item item = new Item(findCategory, name, price, findUser, itemImages, itemInfo);

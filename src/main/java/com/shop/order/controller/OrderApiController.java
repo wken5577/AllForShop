@@ -28,15 +28,15 @@ public class OrderApiController {
     private final ItemService itemService;
     private final BasketService basketService;
 
-    @PostMapping("/api/order")
-    public ResponseEntity order(@RequestBody OrderRequestDto orderRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        Long orderId = orderService.orderOne(orderRequestDto.getDeliveryAddress(),
+    @PostMapping("/order")
+    public ResponseEntity<Void> order(@RequestBody OrderRequestDto orderRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        orderService.orderOne(orderRequestDto.getDeliveryAddress(),
                 orderRequestDto.getItemId(),orderRequestDto.getQuantity(), principalDetail.getUser().getUsername());
 
-        return ResponseEntity.ok(orderId);
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/api/order/payment")
+    @PostMapping("/order/payment")
     public ResponseEntity orderPayment(@RequestBody OrderRequestDto orderRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) throws  URISyntaxException {
 
         ResponseEntity<String> responseToken = requestToken();

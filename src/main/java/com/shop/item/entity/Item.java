@@ -60,10 +60,4 @@ public class Item extends BaseEntity {
 			itemImage.setItem(this);
 		}
 	}
-
-	public void update(Category category, String name, int price) {
-		this.category = category;
-		this.name = name;
-		this.price = price;
-	}
 }
