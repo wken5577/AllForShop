@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     }
 
     public static User createSocialUser(String providerId, String email, SocialProvider socialProvider) {
-        return new User(providerId, null, null, email, socialProvider, UserStatus.AUTHORIZED);
+        return new User(providerId, email, null, email, socialProvider, UserStatus.AUTHORIZED);
     }
 
     public static User createNormalUser(String username, String password, String email) {
