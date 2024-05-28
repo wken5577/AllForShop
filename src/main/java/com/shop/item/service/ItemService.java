@@ -3,11 +3,14 @@ package com.shop.item.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shop.common.exception.http.BadRequestException;
 import com.shop.item.controller.response.ItemDetailRespDto;
+import com.shop.item.controller.response.ItemListRespDto;
 import com.shop.item.entity.Category;
 import com.shop.item.entity.Item;
 import com.shop.item.entity.ItemImages;
@@ -67,5 +70,10 @@ public class ItemService {
 		Item item = itemRepository.findById(itemId).orElseThrow(
 			() -> new BadRequestException("상품 정보가 없습니다."));
 		return new ItemDetailRespDto(item);
+	}
+
+	@Transactional(readOnly = true)
+	public ItemListRespDto getItems(String keyword, Long categoryId, Pageable pageable) {
+		return new ItemListRespDto(itemRepository.findAll(keyword, categoryId, pageable));
 	}
 }

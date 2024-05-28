@@ -10,6 +10,7 @@ import lombok.Getter;
 
 @Getter
 public class ItemDetailRespDto {
+	private Long itemId;
 	private Long categoryId;
 	private String categoryName;
 	private String itemName;
@@ -19,6 +20,7 @@ public class ItemDetailRespDto {
 	private List<String> images;
 
 	public ItemDetailRespDto(Item item){
+		this.itemId = item.getId();
 		this.categoryId = item.getCategory().getId();
 		this.categoryName = item.getCategory().getCategoryName();
 		this.itemName = item.getName();
