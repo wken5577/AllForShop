@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ public class Category {
     @Id @GeneratedValue(generator = "category_sequence")
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String categoryName;
 
     public Category(String categoryName) {
