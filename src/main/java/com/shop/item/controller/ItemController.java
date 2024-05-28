@@ -10,6 +10,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.shop.common.validator.MultipartFileValidator;
 import com.shop.filestore.FileStore;
-import com.shop.item.controller.request.ItemCreateDto;
+import com.shop.item.controller.request.ItemCreateReqDto;
+import com.shop.item.controller.response.ItemDetailRespDto;
 import com.shop.item.entity.ItemImages;
 import com.shop.item.service.ItemService;
 import com.shop.security.dto.PrincipalDetail;
@@ -35,7 +39,7 @@ public class ItemController {
 
 	@PostMapping(value = "/item", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Void> saveItem(
-		@Validated @RequestPart("itemCreateData") ItemCreateDto itemCreateDto,
+		@Validated @RequestPart("itemCreateData") ItemCreateReqDto itemCreateDto,
 		@RequestPart("file") List<MultipartFile> file,
 		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail,
 		BindingResult bindingResult
@@ -45,10 +49,24 @@ public class ItemController {
 		}
 		List<ItemImages> itemImages = fileStore.storeFiles(file);
 
-		itemService.addItem(principalDetail.getUsername(), itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
+		itemService.addItem(principalDetail.getUserId(), itemCreateDto.getCategoryId(), itemCreateDto.getItemName(),
 			itemCreateDto.getPrice(), itemImages, itemCreateDto.getItemInfo());
 
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
+	@DeleteMapping("/item/{itemId}")
+	public ResponseEntity<Void> deleteItem(
+		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail,
+		@PathVariable Long itemId
+	) {
+		itemService.deleteItem(principalDetail.getUserId(), itemId);
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping("/item/{itemId}")
+	public ResponseEntity<ItemDetailRespDto> getItemDetail(@PathVariable Long itemId) {
+		ItemDetailRespDto itemDetailRespDto = itemService.getItemDetail(itemId);
+		return ResponseEntity.ok(itemDetailRespDto);
+	}
 }

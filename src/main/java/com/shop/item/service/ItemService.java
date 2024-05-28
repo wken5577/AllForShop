@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.shop.common.exception.http.BadRequestException;
+import com.shop.item.controller.response.ItemDetailRespDto;
 import com.shop.item.entity.Category;
 import com.shop.item.entity.Item;
 import com.shop.item.entity.ItemImages;
@@ -26,9 +27,10 @@ public class ItemService {
 	private final UserRepository userRepository;
 	private final CategoryRepository categoryRepository;
 
-	public Long addItem(String username, Long categoryId, String name, int price, List<ItemImages> itemImages,
+	@Transactional
+	public Long addItem(Long userId, Long categoryId, String name, int price, List<ItemImages> itemImages,
 		String itemInfo) {
-		User findUser = userRepository.findByUsername(username).orElseThrow(
+		User findUser = userRepository.findById(userId).orElseThrow(
 			() -> new BadRequestException("회원 정보가 없습니다."));
 
 		Category findCategory = categoryRepository.findById(categoryId).orElseThrow(
@@ -48,4 +50,22 @@ public class ItemService {
 		return item.getPrice();
 	}
 
+	@Transactional
+	public void deleteItem(Long userId, Long itemId) {
+		Item findItem = itemRepository.findById(itemId).orElseThrow(
+			() -> new BadRequestException("상품 정보가 없습니다."));
+
+		if (!findItem.getUser().getId().equals(userId)) {
+			throw new BadRequestException("해당 상품을 삭제할 권한이 없습니다.");
+		}
+
+		itemRepository.delete(findItem);
+	}
+
+	@Transactional(readOnly = true)
+	public ItemDetailRespDto getItemDetail(Long itemId) {
+		Item item = itemRepository.findById(itemId).orElseThrow(
+			() -> new BadRequestException("상품 정보가 없습니다."));
+		return new ItemDetailRespDto(item);
+	}
 }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemCreateDto {
+public class ItemCreateReqDto {
 
 	@NotBlank(message = "상품명을 입력해주세요.")
 	@Schema(description = "상품명")
