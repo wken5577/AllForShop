@@ -36,7 +36,9 @@ public class MultipartFileValidator {
 				return false;
 			}
 
-			if (!fileUploadProperties.getAllowedFileTypes().contains(file.getContentType())) {
+			//파일 확장자 검증
+			String exp = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+			if (!fileUploadProperties.getAllowedFileTypes().contains(exp)) {
 				bindingResult.reject("file",
 					"Invalid file type. Allowed types are: " + fileUploadProperties.getAllowedFileTypes());
 				return false;

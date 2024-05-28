@@ -44,7 +44,7 @@ public class ItemController {
 		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail,
 		BindingResult bindingResult
 	) throws IOException, BindException {
-		if (bindingResult.hasErrors() || multipartFileValidator.validate(file, bindingResult)) {
+		if (bindingResult.hasErrors() || !multipartFileValidator.validate(file, bindingResult)) {
 			throw new BindException(bindingResult);
 		}
 		List<ItemImages> itemImages = fileStore.storeFiles(file);
