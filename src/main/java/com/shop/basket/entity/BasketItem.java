@@ -9,9 +9,9 @@ import javax.persistence.*;
 import com.shop.item.entity.Item;
 
 @Entity
-@Getter
 @SequenceGenerator(name = "basket_item_sequence", sequenceName = "basket_item_sequence")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class BasketItem {
 
     @Id
@@ -35,6 +35,10 @@ public class BasketItem {
 
     protected void setShopBasket(ShopBasket shopBasket) {
         this.shopBasket = shopBasket;
+    }
+
+    public int getQuantity() {
+        return quantity;
     }
 
 }

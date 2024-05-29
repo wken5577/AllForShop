@@ -29,7 +29,6 @@ public class ItemService {
 	private final UserRepository userRepository;
 	private final CategoryRepository categoryRepository;
 
-	@Transactional
 	public void addItem(Long userId, Long categoryId, String name, int price, List<ItemImages> itemImages,
 		String itemInfo) {
 		User user = userRepository.findById(userId).orElseThrow(
@@ -43,7 +42,6 @@ public class ItemService {
 		itemRepository.save(item);
 	}
 
-	@Transactional
 	public void deleteItem(Long userId, Long itemId) {
 		Item findItem = itemRepository.findById(itemId).orElseThrow(
 			() -> new BadRequestException("상품 정보가 없습니다."));

@@ -13,11 +13,11 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoryService {
 
 	private final CategoryRepository categoryRepository;
 
-	@Transactional
 	public void createCategory(String categoryName) {
 		categoryRepository.findByCategoryName(categoryName)
 			.ifPresent(category -> {
@@ -26,7 +26,6 @@ public class CategoryService {
 		categoryRepository.save(new Category(categoryName));
 	}
 
-	@Transactional
 	public void deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
 			.orElseThrow(() -> new BadRequestException("해당 카테고리가 존재하지 않습니다."));

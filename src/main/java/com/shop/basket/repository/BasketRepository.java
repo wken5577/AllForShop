@@ -1,5 +1,6 @@
 package com.shop.basket.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.shop.basket.entity.ShopBasket;
 

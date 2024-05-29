@@ -14,13 +14,14 @@ import com.shop.user.repository.UserRepository;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final BasketService basketService;
+
 
     public User findOrCreateUser(String providerId, String email, SocialProvider provider) {
         Optional<User> optionalUser = userRepository.findByProviderId(providerId);
@@ -40,6 +41,7 @@ public class UserService {
         String encPwd = passwordEncoder.encode(password);
         User user = User.createNormalUser(username, encPwd, email);
         userRepository.save(user);
+        basketService.createBasket(user);
     }
 
     public void register(String username, Long id) {
