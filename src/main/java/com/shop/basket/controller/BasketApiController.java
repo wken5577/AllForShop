@@ -22,7 +22,7 @@ public class BasketApiController {
     private final BasketService basketService;
 
     @PostMapping("/basket")
-    public ResponseEntity addShopBasket(@RequestBody String createBasketDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public ResponseEntity<Void> addShopBasket(@RequestBody String createBasketDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
 
         if (principalDetail.getUser() == null) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
@@ -37,7 +37,7 @@ public class BasketApiController {
             return new ResponseEntity("이미 저장된 상품입니다.", HttpStatus.BAD_REQUEST);
         }
 
-        return ResponseEntity.ok(result);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 

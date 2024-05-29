@@ -74,6 +74,7 @@ public class ItemService {
 
 	@Transactional(readOnly = true)
 	public ItemListRespDto getItems(String keyword, Long categoryId, Pageable pageable) {
-		return new ItemListRespDto(itemRepository.findAll(keyword, categoryId, pageable));
+		Page<Item> pages = itemRepository.findAll(keyword, categoryId, pageable);
+		return new ItemListRespDto(pages);
 	}
 }

@@ -62,4 +62,15 @@ public class BasketService {
 
 		return -1L;
 	}
+
+	/**
+	 * Create a basket for a new user
+	 * @param newUser
+	 *
+	 * 처음 가입한 유저에 한에 1번만 호출
+	 */
+	public void createBasket(User newUser) {
+		ShopBasket shopBasket = new ShopBasket(newUser);
+		basketRepository.save(shopBasket);
+	}
 }

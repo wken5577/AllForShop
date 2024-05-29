@@ -3,7 +3,6 @@ package com.shop.item.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,7 +27,6 @@ import com.shop.filestore.FileStore;
 import com.shop.item.controller.request.ItemCreateReqDto;
 import com.shop.item.controller.response.ItemDetailRespDto;
 import com.shop.item.controller.response.ItemListRespDto;
-import com.shop.item.entity.Item;
 import com.shop.item.entity.ItemImages;
 import com.shop.item.service.ItemService;
 import com.shop.security.dto.PrincipalDetail;
@@ -79,10 +76,10 @@ public class ItemController {
 	}
 
 	@GetMapping("/items")
-	public ResponseEntity<ItemListRespDto> getItems(@RequestParam(required = false) String keyword, @RequestParam(required = false) Long categoryId,
+	public ResponseEntity<ItemListRespDto> getItems(@RequestParam(required = false) String keyword,
+		@RequestParam(required = false) Long categoryId,
 		@Validated PageRequestDto pageRequestDto) {
 		Pageable pageable = PageRequest.of(pageRequestDto.getPage() - 1, pageRequestDto.getSize());
-		// Page<Item> items = itemService.getItems(keyword, categoryId, pageable);
 		return ResponseEntity.ok(itemService.getItems(keyword, categoryId, pageable));
 	}
 }

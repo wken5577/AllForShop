@@ -5,6 +5,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shop.basket.service.BasketService;
 import com.shop.common.exception.http.BadRequestException;
 import com.shop.user.entity.SocialProvider;
 import com.shop.user.entity.User;
@@ -19,15 +20,17 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final BasketService basketService;
 
     public User findOrCreateUser(String providerId, String email, SocialProvider provider) {
         Optional<User> optionalUser = userRepository.findByProviderId(providerId);
-        if (optionalUser.isPresent()) {
-            return optionalUser.get();
-        } else {
-            User newUser = User.createSocialUser(providerId, email, provider);
-            return userRepository.save(newUser);
-        }
+        return optionalUser.orElseGet(() -> createNewUser(providerId, email, provider));
+    }
+
+    private User createNewUser(String providerId, String email, SocialProvider provider) {
+        User newUser = User.createSocialUser(providerId, email, provider);
+        basketService.createBasket(newUser);
+        return userRepository.save(newUser);
     }
 
     public void save(String username, String password, String email) {

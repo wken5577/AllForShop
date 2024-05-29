@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.shop.item.entity.Item;
 import com.shop.user.entity.User;
 
 @Entity
@@ -34,5 +35,14 @@ public class ShopBasket {
         basketItem.setShopBasket(this);
     }
 
+    public ShopBasket(User user) {
+        this.user = user;
+    }
+
+    public void addItemToBasket(Item item) {
+        BasketItem basketItem = new BasketItem(item);
+        this.basketItems.add(basketItem);
+        basketItem.setShopBasket(this);
+    }
 
 }
