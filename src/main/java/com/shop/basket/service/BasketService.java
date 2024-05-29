@@ -6,8 +6,9 @@ import java.util.NoSuchElementException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.shop.basket.entity.BasketItem;
 import com.shop.basket.entity.ShopBasket;
+import com.shop.common.exception.entity.DuplicatedBasketItemException;
+import com.shop.common.exception.http.BadRequestException;
 import com.shop.item.entity.Item;
 import com.shop.user.repository.UserRepository;
 import com.shop.basket.repository.BasketRepository;
@@ -18,49 +19,30 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-@Transactional
 public class BasketService {
 
 	private final BasketRepository basketRepository;
 	private final ItemRepository itemRepository;
-	private final UserRepository userRepository;
 
-	public Long addItem(Long itemId, String username) {
-		User user = userRepository.findByUsername(username)
-			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다."));
+	@Transactional
+	public void addItem(Long itemId, int quantity, Long userId) {
+		Item item = itemRepository.findById(itemId)
+			.orElseThrow(() -> new BadRequestException("해당 상품이 존재하지 않습니다."));
+		ShopBasket shopBasket = basketRepository.findByUserId(userId)
+			.orElseThrow(() -> new IllegalStateException("해당 유저의 장바구니가 존재하지 않습니다."));
 
-		ShopBasket shopBasket = basketRepository.findByUserId(user.getId()).orElse(null);
-		Item item = itemRepository.findById(itemId).
-			orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다."));
-
-		if (shopBasket != null) {
-			List<BasketItem> basketItems = shopBasket.getBasketItems();
-			for (BasketItem basketItem : basketItems) {
-				if (basketItem.getItem().getId().equals(item.getId())) {
-					return -1L;
-				}
-			}
-			basketItems.add(new BasketItem(item, shopBasket));
-			return shopBasket.getId();
-		} else {
-			ShopBasket newBasket = new ShopBasket(user, new BasketItem(item));
-			basketRepository.save(newBasket);
-			return newBasket.getId();
+		try {
+			shopBasket.addItemToBasket(item, quantity);
+		} catch (DuplicatedBasketItemException e) {
+			throw new BadRequestException(e);
 		}
-
 	}
 
-	public Long deleteBasketItem(List<Long> ids, String username) {
-
-		User user = userRepository.findByUsername(username)
-			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다."));
-
-		ShopBasket shopBasket = basketRepository.findByUserId(user.getId()).orElse(null);
-		if (shopBasket != null) {
-			return basketRepository.deleteItemsByIds(shopBasket.getId(), ids);
-		}
-
-		return -1L;
+	@Transactional
+	public void deleteBasketItem(List<Long> itemIds, Long userId) {
+	 	ShopBasket shopBasket = basketRepository.findByUserId(userId)
+			.orElseThrow(() -> new IllegalStateException("해당 유저의 장바구니가 존재하지 않습니다."));
+		 shopBasket.deleteBasketItems(itemIds);
 	}
 
 	/**
@@ -69,8 +51,11 @@ public class BasketService {
 	 *
 	 * 처음 가입한 유저에 한에 1번만 호출
 	 */
+	@Transactional
 	public void createBasket(User newUser) {
 		ShopBasket shopBasket = new ShopBasket(newUser);
 		basketRepository.save(shopBasket);
 	}
+
+
 }

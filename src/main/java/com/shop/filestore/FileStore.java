@@ -24,6 +24,9 @@ public class FileStore {
 	public List<ItemImages> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
 		List<ItemImages> result = new ArrayList<>();
 
+		if (multipartFiles == null || multipartFiles.isEmpty())
+			return result;
+
 		for (MultipartFile multipartFile : multipartFiles) {
 			if (!multipartFile.isEmpty()) {
 				ItemImages itemImage = storeFile(multipartFile);

@@ -6,10 +6,14 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.shop.basket.controller.request.AddBasketItemReqDto;
+import com.shop.basket.controller.request.DeleteBasketItemReqDto;
 import com.shop.security.dto.PrincipalDetail;
 import com.shop.basket.service.BasketService;
 
@@ -21,42 +25,18 @@ public class BasketApiController {
 
     private final BasketService basketService;
 
-    @PostMapping("/basket")
-    public ResponseEntity<Void> addShopBasket(@RequestBody String createBasketDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-
-        if (principalDetail.getUser() == null) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-
-        JSONObject jsonObject = new JSONObject(createBasketDto);
-        Object itemIdObj = jsonObject.get("itemId");
-        Long itemId = Long.valueOf(itemIdObj.toString());
-
-        Long result = basketService.addItem(itemId, principalDetail.getUsername());
-        if (result.equals(-1L)){
-            return new ResponseEntity("이미 저장된 상품입니다.", HttpStatus.BAD_REQUEST);
-        }
-
+    @PostMapping("/basket/item")
+    public ResponseEntity<Void> addShopBasket(@Validated @RequestBody AddBasketItemReqDto reqDto,
+        @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        basketService.addItem(reqDto.getItemId(), reqDto.getQuantity(), principalDetail.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 
-    @DeleteMapping("/basket")
-    public ResponseEntity deleteBasketItem(@RequestBody String idsJsonArray, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        JSONObject jsonObject = new JSONObject(idsJsonArray);
-        JSONArray jsonArray = jsonObject.getJSONArray("ids");
-        ArrayList<Long> ids = new ArrayList();
-
-        for (Object o : jsonArray) {
-            ids.add(Long.valueOf(o.toString()));
-        }
-
-        Long result = basketService.deleteBasketItem(ids, principalDetail.getUsername());
-        if(result > 0){
-            return ResponseEntity.ok(result);
-        }
-
-        else return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    @DeleteMapping("/basket/item")
+    public ResponseEntity<Void> deleteBasketItem(@RequestBody DeleteBasketItemReqDto reqDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        basketService.deleteBasketItem(reqDto.getItemIds(), principalDetail.getUserId());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 

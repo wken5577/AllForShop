@@ -53,11 +53,13 @@ public class Item extends BaseEntity {
 		this.category = category;
 		this.name = name;
 		this.price = price;
-		this.itemImages = itemImages;
 		this.itemInfo = itemInfo;
 
-		for (ItemImages itemImage : itemImages) {
-			itemImage.setItem(this);
-		}
+		itemImages.forEach(this::addItemImage);
+	}
+
+	private void addItemImage(ItemImages itemImage) {
+		this.itemImages.add(itemImage);
+		itemImage.setItem(this);
 	}
 }

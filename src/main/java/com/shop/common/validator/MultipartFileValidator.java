@@ -18,8 +18,7 @@ public class MultipartFileValidator {
 
 	public boolean validate(List<MultipartFile> files, BindingResult bindingResult) {
 		if (files == null || files.isEmpty()) {
-			bindingResult.reject("files", "No files uploaded");
-			return false;
+			return true;
 		}
 
 		if (files.size() > fileUploadProperties.getMaxFileCount()) {

@@ -1,7 +1,6 @@
 package com.shop.item.service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,26 +30,17 @@ public class ItemService {
 	private final CategoryRepository categoryRepository;
 
 	@Transactional
-	public Long addItem(Long userId, Long categoryId, String name, int price, List<ItemImages> itemImages,
+	public void addItem(Long userId, Long categoryId, String name, int price, List<ItemImages> itemImages,
 		String itemInfo) {
-		User findUser = userRepository.findById(userId).orElseThrow(
+		User user = userRepository.findById(userId).orElseThrow(
 			() -> new BadRequestException("회원 정보가 없습니다."));
 
-		Category findCategory = categoryRepository.findById(categoryId).orElseThrow(
+		Category category = categoryRepository.findById(categoryId).orElseThrow(
 			() -> new BadRequestException("카테고리 정보가 없습니다.")
 		);
 
-		Item item = new Item(findCategory, name, price, findUser, itemImages, itemInfo);
+		Item item = new Item(category, name, price, user, itemImages, itemInfo);
 		itemRepository.save(item);
-
-		return item.getId();
-	}
-
-	@Transactional(readOnly = true)
-	public long getItemPrice(Long itemId) {
-		Item item = itemRepository.findById(itemId)
-			.orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다."));
-		return item.getPrice();
 	}
 
 	@Transactional

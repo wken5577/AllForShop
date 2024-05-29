@@ -33,7 +33,7 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<Void> register(@RequestBody @Validated UserRegisterReqDto reqDto,
 		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail) {
-		userService.register(reqDto.getUsername(), principalDetail.getUser().getId());
+		userService.register(reqDto.getUsername(), principalDetail.getUserId());
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 

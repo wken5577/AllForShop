@@ -26,13 +26,11 @@ public class BasketItem {
     @JoinColumn(name = "shop_basket_id")
     private ShopBasket shopBasket;
 
-    public BasketItem(Item item) {
-        this.item = item;
-    }
+    private int quantity;
 
-    public BasketItem(Item item, ShopBasket shopBasket) {
+    public BasketItem(Item item, int quantity) {
         this.item = item;
-        setShopBasket(shopBasket);
+        this.quantity = quantity;
     }
 
     protected void setShopBasket(ShopBasket shopBasket) {

@@ -15,4 +15,10 @@ public abstract class HttpException extends RuntimeException{
 		this.status = status;
 		this.message = message;
 	}
+
+	public HttpException(HttpStatus status, String message, Exception cause) {
+		super(message, cause);
+		this.status = status;
+		this.message = message;
+	}
 }
