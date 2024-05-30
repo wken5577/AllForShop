@@ -13,7 +13,7 @@ plugins {
 
 group = 'all-for-shop'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
@@ -23,6 +23,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -38,6 +39,8 @@ dependencies {
 
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
 
+	// iamport 결제 모듈
+	implementation 'com.github.iamport:iamport-rest-client-java:0.1.6'
 
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
