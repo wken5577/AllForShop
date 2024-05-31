@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class OrderRespDto {
+public class OrderResultRespDto {
 	private UUID orderId;
 	private int amount;
 }

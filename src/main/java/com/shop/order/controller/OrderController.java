@@ -1,19 +1,20 @@
 package com.shop.order.controller;
 
-import java.awt.image.VolatileImage;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.yaml.snakeyaml.nodes.NodeId;
 
 import com.shop.order.controller.request.OrderReqDto;
-import com.shop.order.controller.response.OrderRespDto;
-import com.shop.order.repository.dto.OrderResponseDto;
+import com.shop.order.controller.response.OrderListRespDto;
+import com.shop.order.controller.response.OrderResultRespDto;
 import com.shop.order.service.OrderService;
 import com.shop.security.dto.PrincipalDetail;
 
@@ -27,10 +28,26 @@ public class OrderController {
 	private final OrderService orderService;
 
 	@PostMapping("/order")
-	public ResponseEntity<OrderRespDto> order(@RequestBody OrderReqDto orderRequestDto,
+	public ResponseEntity<OrderResultRespDto> order(@RequestBody OrderReqDto orderRequestDto,
 		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail
 	) {
-		OrderRespDto res = orderService.createOrder(orderRequestDto, principalDetail.getUserId());
+		OrderResultRespDto res = orderService.createOrder(orderRequestDto, principalDetail.getUserId());
+		return ResponseEntity.ok(res);
+	}
+
+	@DeleteMapping("/order/{orderId}")
+	public ResponseEntity<Void> cancelOrder(@PathVariable UUID orderId,
+		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail
+	) {
+		orderService.cancelOrder(orderId, principalDetail.getUserId());
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	@GetMapping("/order")
+	public ResponseEntity<OrderListRespDto> getOrders(
+		@Parameter(hidden = true) @AuthenticationPrincipal PrincipalDetail principalDetail
+	) {
+		OrderListRespDto res = orderService.getOrders(principalDetail.getUserId());
 		return ResponseEntity.ok(res);
 	}
 }

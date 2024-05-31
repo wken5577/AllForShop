@@ -12,7 +12,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderResponseDto {
+public class OrderDto {
 
     private UUID orderId;
     private DeliveryStatus deliveryStatus;
@@ -20,7 +20,7 @@ public class OrderResponseDto {
     private int totalPrice;
     private List<OrderItemsDto> orderItems;
 
-    public OrderResponseDto(UUID orderId, DeliveryStatus deliveryStatus, OrderStatus orderStatus, int totalPrice) {
+    public OrderDto(UUID orderId, DeliveryStatus deliveryStatus, OrderStatus orderStatus, int totalPrice) {
         this.orderId = orderId;
         this.deliveryStatus = deliveryStatus;
         this.orderStatus = orderStatus;

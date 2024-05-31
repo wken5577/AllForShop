@@ -13,6 +13,7 @@ import java.util.UUID;
 import org.springframework.data.domain.Persistable;
 
 import com.github.f4b6a3.uuid.UuidCreator;
+import com.shop.common.exception.entity.OrderAlreadyPaidException;
 import com.shop.user.entity.User;
 
 @Entity
@@ -71,7 +72,9 @@ public class Order implements Persistable<UUID> {
         order.orderItems = orderItems;
     }
 
-    public void cancelOrder() {
+    public void cancelOrder() throws OrderAlreadyPaidException {
+        if (this.orderStatus == OrderStatus.PAYMENT_COMPLETE)
+            throw new OrderAlreadyPaidException("이미 결제가 완료된 주문입니다. 결제 취소 후 다시시도해주세요.");
         this.orderStatus = OrderStatus.CANCEL;
     }
 

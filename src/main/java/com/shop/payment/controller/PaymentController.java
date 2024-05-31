@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.shop.common.annotation.PreventDuplicate;
-import com.shop.common.config.properties.PaymentProperties;
 import com.shop.common.exception.http.BadRequestException;
-import com.shop.common.utils.ApiUtils;
 import com.shop.order.service.OrderService;
 import com.shop.payment.controller.request.PaymentCancelReqDto;
 import com.shop.payment.controller.request.PaymentConfirmReqDto;

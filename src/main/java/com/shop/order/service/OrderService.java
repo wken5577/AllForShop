@@ -7,15 +7,18 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.shop.common.exception.entity.OrderAlreadyPaidException;
 import com.shop.common.exception.http.BadRequestException;
 import com.shop.item.entity.Item;
 import com.shop.item.repository.ItemRepository;
 import com.shop.order.controller.request.OrderReqDto;
 import com.shop.order.controller.request.OrderReqItem;
-import com.shop.order.controller.response.OrderRespDto;
+import com.shop.order.controller.response.OrderListRespDto;
+import com.shop.order.controller.response.OrderResultRespDto;
 import com.shop.order.entity.Order;
 import com.shop.order.entity.OrderItem;
 import com.shop.order.repository.OrderRepository;
+import com.shop.order.repository.dto.OrderDto;
 import com.shop.user.entity.User;
 import com.shop.user.repository.UserRepository;
 
@@ -30,14 +33,14 @@ public class OrderService {
 	private final ItemRepository itemRepository;
 	private final OrderRepository orderRepository;
 
-	public OrderRespDto createOrder(OrderReqDto orderRequestDto, Long userId) {
+	public OrderResultRespDto createOrder(OrderReqDto orderRequestDto, Long userId) {
 		User user = userRepository.findById(userId)
 			.orElseThrow(() -> new BadRequestException("사용자를 찾을 수 없습니다."));
 		List<OrderItem> orderItems = createOrderItems(orderRequestDto);
 		Order order = Order.order(user, orderRequestDto.getDeliveryAddress(), orderItems);
 
 		orderRepository.save(order);
-		return new OrderRespDto(order.getId(), order.getTotalPrice());
+		return new OrderResultRespDto(order.getId(), order.getTotalPrice());
 	}
 
 	private List<OrderItem> createOrderItems(OrderReqDto orderRequestDto) {
@@ -78,5 +81,20 @@ public class OrderService {
 		Order order = orderRepository.findById(orderId)
 			.orElseThrow(() -> new BadRequestException("주문을 찾을 수 없습니다."));
 		order.paymentCancel();
+	}
+
+	public void cancelOrder(UUID orderId, Long userId) {
+		Order order = orderRepository.findByIdAndUserId(orderId, userId)
+			.orElseThrow(() -> new BadRequestException("주문을 찾을 수 없습니다."));
+		try {
+			order.cancelOrder();
+		} catch (OrderAlreadyPaidException e) {
+			throw new BadRequestException(e);
+		}
+	}
+
+	public OrderListRespDto getOrders(Long userId) {
+		List<OrderDto> orders = orderRepository.findByUserId(userId);
+		return new OrderListRespDto(orders);
 	}
 }
