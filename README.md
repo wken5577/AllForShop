@@ -15,9 +15,9 @@
 
 ## 프로젝트 설계
 ### ERD
-![ALL FOR SHOP](https://github.com/wken5577/AllForShop/assets/88573971/7a7774fb-2c3a-4ec9-94e4-f8a95411b4e0)
-
-
+<div align="center">
+<img src="https://github.com/wken5577/AllForShop/assets/88573971/7a7774fb-2c3a-4ec9-94e4-f8a95411b4e0" width="700" height="600"></img>
+</div>
 
 ## 설치 방법
 
