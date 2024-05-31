@@ -4,7 +4,7 @@
 
 ## 목차
 1. [소개](#소개)
-2. [프로젝트 설계](#프로젝트 설계)
+2. [프로젝트 설계](#프로젝트-설계)
 3. [기능](#기능)
 4. [설치 방법](#설치-방법)
 
@@ -15,7 +15,7 @@
 
 ## 프로젝트 설계
 ### ERD
-![ERD](https://github.com/user-attachments/files/15509871/ALL.FOR.SHOP.1.pdf)
+![ALL FOR SHOP (1).pdf](https://github.com/user-attachments/files/15509871/ALL.FOR.SHOP.1.pdf)
 
 
 ## 설치 방법
