@@ -2,6 +2,7 @@ package com.shop.order.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
@@ -33,7 +34,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 			.where(QOrder.order.user.id.eq(userId))
 			.fetch();
 
-		List<Long> orderIds = orders.stream().map(o -> o.getOrderId()).collect(Collectors.toList());
+		List<UUID> orderIds = orders.stream().map(o -> o.getOrderId()).collect(Collectors.toList());
 
 		List<OrderItemsDto> orderItems = getOrderItemsDtos(orderIds);
 		Map<Long, List<OrderItemsDto>> orderItemMap = getOrderItemMap(orderItems);
@@ -43,16 +44,16 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 		return orders;
 	}
 
-	public Map<Long, List<OrderItemsDto>> getOrderItemMap(List<OrderItemsDto> orderItems) {
+	private Map<Long, List<OrderItemsDto>> getOrderItemMap(List<OrderItemsDto> orderItems) {
 		return orderItems.stream().
 			collect(Collectors.groupingBy(orderItem -> orderItem.getOrderId()));
 	}
 
-	public List<OrderItemsDto> getOrderItemsDtos(List<Long> orderIds) {
+	private List<OrderItemsDto> getOrderItemsDtos(List<UUID> orderIds) {
 		List<OrderItemsDto> orderItems = queryFactory
 			.select(
 				Projections.constructor(OrderItemsDto.class, QOrderItem.orderItem.order.id,
-					QItem.item.name, QOrderItem.orderItem.pricePerItem, QOrderItem.orderItem.quantity,
+					QItem.item.name, QItem.item.price, QOrderItem.orderItem.quantity,
 					QOrderItem.orderItem.totalPrice)
 			)
 			.from(QOrderItem.orderItem)

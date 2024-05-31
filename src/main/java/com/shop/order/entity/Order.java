@@ -1,24 +1,30 @@
 package com.shop.order.entity;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import org.springframework.data.domain.Persistable;
+
+import com.github.f4b6a3.uuid.UuidCreator;
 import com.shop.user.entity.User;
 
 @Entity
 @Table(name = "ORDERS")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(name = "order_sequence", sequenceName = "order_sequence" )
-public class Order {
+public class Order implements Persistable<UUID> {
 
-    @Id @GeneratedValue(generator = "order_sequence")
-    private Long id;
+    @Id
+    @Column(length = 16)
+    @EqualsAndHashCode.Include
+    private final UUID id = UuidCreator.getTimeOrdered();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -36,16 +42,19 @@ public class Order {
 
     private int totalPrice;
 
+    @Transient
+    private boolean isNew = true;
+
     private Order(User user,String deliveryAddress) {
         this.user = user;
         this.deliveryStatus = DeliveryStatus.PREPARING;
-        this.orderStatus = OrderStatus.ORDER;
+        this.orderStatus = OrderStatus.AWAITING_PAYMENT_CONFIRMATION;
         this.deliveryAddress = deliveryAddress;
     }
 
     public static Order order(User user, String deliveryAddress, List<OrderItem> orderItems){
         Order order = new Order(user, deliveryAddress);
-        order.setOrderItems(order, orderItems);
+        setOrderItems(order, orderItems);
 
         return order;
     }
@@ -60,7 +69,26 @@ public class Order {
         order.orderItems = orderItems;
     }
 
-    public void orderCancel() {
+    public void cancelOrder() {
         this.orderStatus = OrderStatus.CANCEL;
+    }
+
+    @Override
+    public boolean isNew() {
+        return isNew;
+    }
+
+    @PrePersist
+    @PostLoad
+    public void setPersisted() {
+        this.isNew = false;
+    }
+
+    public void paymentComplete() {
+        this.orderStatus = OrderStatus.PAYMENT_COMPLETE;
+    }
+
+    public boolean isPaymentComplete() {
+        return this.orderStatus == OrderStatus.PAYMENT_COMPLETE;
     }
 }

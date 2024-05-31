@@ -18,7 +18,6 @@ public class OrderItemsDto {
     public OrderItemsDto(Long orderId, String itemName, int price, int quantity, int totalPrice) {
         this.orderId = orderId;
         this.itemName = itemName;
-        this.price = price;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
     }

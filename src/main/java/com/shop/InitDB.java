@@ -43,10 +43,10 @@ public class InitDB {
         User user = User.createNormalUser("user1", "1234", "email1");
         userRepository.save(user);
 
-        Item item1 = new Item(category1, "테스트상품1", 10000, user, new ArrayList<>(), "테스트상품1입니다.");
-        Item item2 = new Item(category2, "테스트상품2", 20000, user, new ArrayList<>(), "테스트상품2입니다.");
-        Item item3 = new Item(category3, "테스트상품3", 30000, user, new ArrayList<>(), "테스트상품3입니다.");
-        Item item4 = new Item(category4, "테스트상품4", 40000, user, new ArrayList<>(), "테스트상품4입니다.");
+        Item item1 = new Item(category1, "테스트상품1", 100, user, new ArrayList<>(), "테스트상품1입니다.");
+        Item item2 = new Item(category2, "테스트상품2", 100, user, new ArrayList<>(), "테스트상품2입니다.");
+        Item item3 = new Item(category3, "테스트상품3", 100, user, new ArrayList<>(), "테스트상품3입니다.");
+        Item item4 = new Item(category4, "테스트상품4", 100, user, new ArrayList<>(), "테스트상품4입니다.");
 
         itemRepository.saveAll(List.of(item1, item2, item3, item4));
     }
