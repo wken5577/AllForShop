@@ -15,7 +15,8 @@
 
 ## 프로젝트 설계
 ### ERD
-![ALL FOR SHOP (1).pdf](https://github.com/user-attachments/files/15509871/ALL.FOR.SHOP.1.pdf)
+![ALL FOR SHOP](https://github.com/wken5577/AllForShop/assets/88573971/7a7774fb-2c3a-4ec9-94e4-f8a95411b4e0)
+
 
 
 ## 설치 방법
