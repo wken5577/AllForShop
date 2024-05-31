@@ -59,16 +59,24 @@ public class OrderService {
 		return orderItems;
 	}
 
-	public void paymentComplete(UUID orderId) {
+	public void paymentComplete(UUID orderId, String paymentKey) {
 		Order order = orderRepository.findById(orderId)
 			.orElseThrow(() -> new BadRequestException("주문을 찾을 수 없습니다."));
-		order.paymentComplete();
+		order.paymentComplete(paymentKey);
 	}
 
-	public void checkOrderAmount(UUID orderId, int amount) {
+	public void checkOrder(UUID orderId, int amount) {
 		Order order = orderRepository.findById(orderId)
 			.orElseThrow(() -> new BadRequestException("주문을 찾을 수 없습니다."));
 		if (order.getTotalPrice() != amount)
 			throw new BadRequestException("결제 금액이 일치하지 않습니다.");
+		if (order.isPaymentComplete())
+			throw new BadRequestException("이미 결제가 완료된 주문입니다.");
+	}
+
+	public void paymentCancel(UUID orderId) {
+		Order order = orderRepository.findById(orderId)
+			.orElseThrow(() -> new BadRequestException("주문을 찾을 수 없습니다."));
+		order.paymentCancel();
 	}
 }

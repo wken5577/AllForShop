@@ -40,6 +40,8 @@ public class Order implements Persistable<UUID> {
     private OrderStatus orderStatus;
     private String deliveryAddress;
 
+    private String paymentKey;
+
     private int totalPrice;
 
     @Transient
@@ -84,11 +86,16 @@ public class Order implements Persistable<UUID> {
         this.isNew = false;
     }
 
-    public void paymentComplete() {
+    public void paymentComplete(String paymentKey) {
         this.orderStatus = OrderStatus.PAYMENT_COMPLETE;
+        this.paymentKey = paymentKey;
     }
 
     public boolean isPaymentComplete() {
         return this.orderStatus == OrderStatus.PAYMENT_COMPLETE;
+    }
+
+    public void paymentCancel() {
+        this.orderStatus = OrderStatus.PAYMENT_CANCEL;
     }
 }
