@@ -41,7 +41,7 @@
   - Naver, Google 소셜 로그인, username password 기반의 로그인 기능
   - CSRF Protection을 적용하여 보안 강화
 - 상품 관리
-  - 상품 등록, 수정, 삭제 기능
+  - 상품 등록, 삭제 기능
   - 상품 검색 기능
   - 상품 이미지 업로드 기능
 - 주문 관리

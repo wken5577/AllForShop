@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class PaymentAspect {
 
 	private static final String REDIS_KEY_PREFIX = "payment:";
-	private static final String REDIS_VALUE = "processing";
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedissonClient redissonClient;
 
 	@Around("@annotation(preventDuplicate)")
 	public Object checkDuplicateRequest(ProceedingJoinPoint joinPoint, PreventDuplicate preventDuplicate) throws
@@ -31,24 +32,21 @@ public class PaymentAspect {
 		Object[] args = joinPoint.getArgs();
 		if (args.length > 0 && args[0] instanceof PaymentConfirmReqDto reqDto) {
 			UUID orderId = reqDto.getOrderId();
-			String redisKey = REDIS_KEY_PREFIX + orderId.toString();
-			long timeout = preventDuplicate.timeout();
+			String lockKey = REDIS_KEY_PREFIX + orderId.toString();
+			RLock lock = redissonClient.getLock(lockKey);
 
-			// Try to set the key if it does not exist
-			Boolean result = redisTemplate.opsForValue()
-				.setIfAbsent(redisKey, REDIS_VALUE, timeout, TimeUnit.MILLISECONDS);
 
-			if (Boolean.FALSE.equals(result)) {
+			if (lock.tryLock(0, TimeUnit.SECONDS)) {
+				try {
+					return joinPoint.proceed();
+				} finally {
+					lock.unlock();
+				}
+			} else {
 				// 이미 같은 orderId로 요청이 처리중인 경우
 				return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).build();
 			}
 
-			try {
-				return joinPoint.proceed();
-			} finally {
-				// 처리 완료 후 Redis key 삭제 (TTL을 초과하지 않은 경우에 대비)
-				redisTemplate.delete(redisKey);
-			}
 		}
 
 		return joinPoint.proceed();
