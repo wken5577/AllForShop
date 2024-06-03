@@ -5,7 +5,7 @@
 ## 목차
 1. [소개](#소개)
 2. [프로젝트 설계](#프로젝트-설계)
-3. [기능](#기능)
+3. [기능 구현](#기능-구현)
 4. [설치 방법](#설치-방법)
 
 
@@ -15,9 +15,68 @@
 
 ## 프로젝트 설계
 ### ERD
-<div align="center">
-<img src="https://github.com/wken5577/AllForShop/assets/88573971/7a7774fb-2c3a-4ec9-94e4-f8a95411b4e0" width="650" height="450"></img>
+<div style="text-align:center">
+<img src="https://github.com/wken5577/AllForShop/assets/88573971/7a7774fb-2c3a-4ec9-94e4-f8a95411b4e0" width="500" height="350"></img>
 </div>
+
+### 기술 스택
+<div style="text-align:center">
+<img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white"></a>
+<img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
+<img src="https://img.shields.io/badge/spring_boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+<img src="https://img.shields.io/badge/spring_security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
+<img src="https://img.shields.io/badge/spring_data_jpa-6DB33F?style=for-the-badge&logo=&logoColor=white">
+</div>
+<div style="text-align:center">
+<img src="https://img.shields.io/badge/hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white"></a>
+<img src="https://img.shields.io/badge/querydsl-04ACE6?style=for-the-badge&logo=&logoColor=white"></a>
+<img src="https://img.shields.io/badge/redis-FF4438?style=for-the-badge&logo=redis&logoColor=white"></a>
+<img src="https://img.shields.io/badge/h2database-FF7A00?style=for-the-badge&logo=&logoColor=white"></a>
+</div>
+
+## 기능 구현
+
+### 주요 기능
+- Spring Session기반의 로그인 기능
+  - Naver, Google 소셜 로그인, username password 기반의 로그인 기능
+  - CSRF Protection을 적용하여 보안 강화
+- 상품 관리
+  - 상품 등록, 수정, 삭제 기능
+  - 상품 검색 기능
+  - 상품 이미지 업로드 기능
+- 주문 관리
+  - 주문 생성, 취소
+  - 주문 조회 기능
+- 결제 기능
+  - Toss Payments 결제 API를 사용한 결제 기능
+  - 결제 승인, 취소 기능
+
+### API Documentation
+| Method | Endpoint                                 | Summary             |
+| ------ |------------------------------------------|---------------------|
+| POST | `/login`                                 | User login API      |
+| POST | `/register`                              | User 등록 API         |
+| POST | `/join`                                  | 회원 가입 API           |
+| GET | `/oauth2/authorization/google`           | Google login API    |
+| GET | `/oauth2/authorization/naver`            | Naver login API     |
+| POST | `/payment/confirm`                       | 결제 승인 API           |
+| POST | `/payment/cancel`                        | 결제 취소 API           |
+| GET | `/order`                                 | 주문 조회 API           |
+| POST | `/order`                                 | 주문 생성 API           |
+| DELETE | `/order/{orderId}`                       | 주문 취소 API           |
+| POST | `/category`                              | Category 등록 API     |
+| GET | `/categories`                            | Category 조회 API     |
+| DELETE | `/category/{categoryId}`                 | Category 삭제 API     |
+| GET | `/basket/item`                           | 장바구니 item 조회 API    |
+| POST | `/basket/item`                           | 장바구니 item 추가 API    |
+| DELETE | `/basket/item`                           | 장바구니 item 삭제 API    |
+| POST | `/item`                                  | Item 등록 API         |
+| GET | `/items`                                 | Item 목록 API         |
+| GET | `/item/{itemId}`                         | Item 상세조회 API       |
+| DELETE | `/item/{itemId}`                         | Item 삭제 API         |
+| GET | `/item/image/{filename}`                 | Item image 조회 API   |
+| GET | `/item/image/attach/{itemId}/{filename}` | Item image 다운로드 API |
+
 
 ## 설치 방법
 
@@ -85,8 +144,8 @@ logging-level:
   org.hibernate.SQL: debug
 
 redis:
-  host: localhost
-  port: 6379
+  host: 'redis host'
+  port: 'redis port'
 
 file:
   upload:
