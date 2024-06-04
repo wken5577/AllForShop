@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PreventDuplicate {
-	long timeout() default 1000; // milliseconds
+	long timeout() default 0; // milliseconds
 }

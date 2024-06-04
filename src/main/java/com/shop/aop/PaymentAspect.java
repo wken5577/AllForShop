@@ -36,7 +36,7 @@ public class PaymentAspect {
 			RLock lock = redissonClient.getLock(lockKey);
 
 
-			if (lock.tryLock(0, TimeUnit.SECONDS)) {
+			if (lock.tryLock(preventDuplicate.timeout(), TimeUnit.MILLISECONDS)) {
 				try {
 					return joinPoint.proceed();
 				} finally {
