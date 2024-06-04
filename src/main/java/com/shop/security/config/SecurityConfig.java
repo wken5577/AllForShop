@@ -113,9 +113,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		CorsConfiguration corsConfig = new CorsConfiguration();
 
 		corsConfig.setAllowCredentials(true);
-		corsConfig.addAllowedOrigin("http://localhost:3000"); // 클라이언트 도메인
-		corsConfig.addAllowedHeader("*");
-		corsConfig.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
+		corsConfig.setAllowedHeaders(Arrays.asList(corsProperties.getAllowedHeaders().split(",")));
+		corsConfig.setAllowedMethods(Arrays.asList(corsProperties.getAllowedMethods().split(",")));
+		corsConfig.setAllowedOrigins(Arrays.asList(corsProperties.getAllowedOrigins().split(",")));
+		corsConfig.setMaxAge(corsConfig.getMaxAge());
 
 		source.registerCorsConfiguration("/**", corsConfig);
 		return new CorsFilter(source);
