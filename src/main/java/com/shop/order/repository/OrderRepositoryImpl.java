@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.order.repository.dto.OrderDto;
 import com.shop.order.repository.dto.OrderItemsDto;
@@ -28,11 +29,14 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 	public List<OrderDto> findByUserId(Long userId) {
 		List<OrderDto> orders = queryFactory
 			.select(
-				Projections.constructor(OrderDto.class, order.id, order.deliveryStatus,
-					order.orderStatus, order.totalPrice)
+				Projections.constructor(OrderDto.class,
+					order.id,
+					order.deliveryStatus,
+					order.orderStatus,
+					order.totalPrice)
 			)
 			.from(order)
-			.where(order.user.id.eq(userId))
+			.where(userIdEq(userId))
 			.fetch();
 
 		List<UUID> orderIds = orders.stream().map(OrderDto::getOrderId).collect(Collectors.toList());
@@ -45,6 +49,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 		return orders;
 	}
 
+
 	private Map<UUID, List<OrderItemsDto>> getOrderItemMap(List<OrderItemsDto> orderItems) {
 		return orderItems.stream().
 			collect(Collectors.groupingBy(OrderItemsDto::getOrderId));
@@ -53,15 +58,26 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 	private List<OrderItemsDto> getOrderItemsDtos(List<UUID> orderIds) {
 		List<OrderItemsDto> orderItems = queryFactory
 			.select(
-				Projections.constructor(OrderItemsDto.class, orderItem.order.id,
-					item.name, item.price, orderItem.quantity,
+				Projections.constructor(OrderItemsDto.class,
+					orderItem.order.id,
+					item.name,
+					item.price,
+					orderItem.quantity,
 					orderItem.totalPrice)
 			)
 			.from(orderItem)
 			.join(orderItem.item, item)
-			.where(orderItem.order.id.in(orderIds))
+			.where(orderIdIn(orderIds))
 			.fetch();
 
 		return orderItems;
+	}
+
+	private static BooleanExpression orderIdIn(List<UUID> orderIds) {
+		return orderItem.order.id.in(orderIds);
+	}
+
+	private static BooleanExpression userIdEq(Long userId) {
+		return order.user.id.eq(userId);
 	}
 }
